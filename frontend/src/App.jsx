@@ -12,6 +12,7 @@ import "./App.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import EmergencyContacts from "./pages/EmergencyContacts";
 
 /* ==========================================================================
    DATA
@@ -760,7 +761,7 @@ function AppRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route
           path="/emergency-contacts"
-          element={<PlaceholderPage title="Emergency Contacts" />}
+          element={<EmergencyContacts />}
         />
         <Route path="/sos" element={<PlaceholderPage title="Emergency SOS" />} />
         <Route path="/location" element={<PlaceholderPage title="Live Location" />} />
