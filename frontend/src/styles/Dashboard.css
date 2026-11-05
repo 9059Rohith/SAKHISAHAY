@@ -1,0 +1,728 @@
+/* ==========================================================================
+   SAKHISAHAY  |  Dashboard.css
+   All selectors are prefixed with "db-" so they never clash with App.css,
+   Auth.css or index.css.
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap");
+
+/* --------------------------------------------------------------------------
+   Tokens and base
+   -------------------------------------------------------------------------- */
+.db-page {
+  /* brand palette */
+  --db-lavender: #b8a5d6;
+  --db-blush: #f5dce5;
+  --db-bg: #fffafc;
+  --db-rose: #c77d98;
+  --db-heading: #49364f;
+  --db-body: #6b6570;
+
+  /* derived shades (used for contrast and soft surfaces) */
+  --db-rose-deep: #a04f6e;
+  --db-plum-soft: #5b4662;
+  --db-blush-pale: #fbeef2;
+  --db-lavender-pale: #efe9f7;
+
+  --db-font-heading: "Fraunces", Georgia, "Times New Roman", serif;
+  --db-font-body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --db-radius-sm: 14px;
+  --db-radius-md: 22px;
+  --db-radius-lg: 28px;
+  --db-shadow-soft: 0 10px 30px rgba(73, 54, 79, 0.08);
+  --db-shadow-lift: 0 16px 38px rgba(73, 54, 79, 0.14);
+
+  min-height: 100vh;
+  overflow-x: clip;
+  background-color: var(--db-bg);
+  color: var(--db-body);
+  font-family: var(--db-font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.db-page *,
+.db-page *::before,
+.db-page *::after {
+  box-sizing: border-box;
+}
+
+.db-page h1,
+.db-page h2,
+.db-page h3,
+.db-page p,
+.db-page ul {
+  margin: 0;
+}
+
+.db-page ul {
+  padding: 0;
+  list-style: none;
+}
+
+.db-page h1,
+.db-page h2,
+.db-page h3 {
+  font-family: var(--db-font-heading);
+  color: var(--db-heading);
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+.db-page :focus-visible {
+  outline: 3px solid var(--db-rose-deep);
+  outline-offset: 3px;
+}
+
+.db-container {
+  width: min(1160px, 100% - 2.5rem);
+  margin-inline: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Shared: cards, buttons, icon badge
+   -------------------------------------------------------------------------- */
+.db-card {
+  border: 1px solid rgba(184, 165, 214, 0.35);
+  border-radius: var(--db-radius-md);
+  background-color: #ffffff;
+  box-shadow: var(--db-shadow-soft);
+}
+
+.db-icon-badge {
+  display: inline-grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background-color: var(--db-blush);
+  color: var(--db-heading);
+}
+
+.db-icon-badge--lavender {
+  background-color: #ffffff;
+}
+
+.db-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  border: 2px solid var(--db-heading);
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease,
+    color 0.2s ease, border-color 0.2s ease;
+}
+
+.db-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Colours are repeated on :hover/:focus so global "a:hover" rules cannot override them */
+.db-btn--primary,
+.db-btn--primary:hover,
+.db-btn--primary:focus {
+  background-color: var(--db-heading);
+  border-color: var(--db-heading);
+  color: var(--db-bg);
+}
+
+.db-btn--primary:hover {
+  background-color: var(--db-plum-soft);
+  border-color: var(--db-plum-soft);
+  box-shadow: var(--db-shadow-lift);
+}
+
+.db-btn--outline,
+.db-btn--outline:hover,
+.db-btn--outline:focus {
+  background-color: transparent;
+  border-color: var(--db-heading);
+  color: var(--db-heading);
+}
+
+.db-btn--outline:hover {
+  background-color: var(--db-blush);
+}
+
+/* --------------------------------------------------------------------------
+   Top navigation
+   -------------------------------------------------------------------------- */
+.db-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: rgba(255, 250, 252, 0.92);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(73, 54, 79, 0.1);
+}
+
+.db-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 72px;
+}
+
+.db-brand,
+.db-brand:hover,
+.db-brand:focus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--db-heading);
+  text-decoration: none;
+}
+
+.db-brand__mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background-color: var(--db-heading);
+  color: var(--db-blush);
+}
+
+.db-brand__name {
+  font-family: var(--db-font-heading);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.db-nav {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.db-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  margin-inline: auto;
+}
+
+.db-nav__link,
+.db-nav__link:hover,
+.db-nav__link:focus {
+  display: inline-block;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  color: var(--db-heading);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.db-nav__link:hover,
+.db-nav__link[aria-current="page"] {
+  background-color: var(--db-blush);
+}
+
+.db-nav__link[aria-current="page"] {
+  font-weight: 700;
+}
+
+.db-nav__account {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.db-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--db-heading);
+  font-weight: 600;
+}
+
+.db-profile__avatar {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: var(--db-lavender);
+  color: var(--db-heading);
+  font-weight: 700;
+}
+
+.db-nav-toggle {
+  display: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 2px solid var(--db-heading);
+  border-radius: 14px;
+  background-color: transparent;
+  color: var(--db-heading);
+  cursor: pointer;
+}
+
+.db-nav-toggle:hover {
+  border-color: var(--db-heading);
+  background-color: var(--db-blush);
+}
+
+/* --------------------------------------------------------------------------
+   Main layout
+   -------------------------------------------------------------------------- */
+.db-main {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 2.75rem);
+  padding-block: clamp(1.75rem, 4vw, 3rem) clamp(3rem, 6vw, 5rem);
+}
+
+.db-top {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 1.5rem;
+}
+
+.db-bottom {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1.5rem;
+}
+
+.db-section__head {
+  margin-bottom: 1.25rem;
+}
+
+.db-section__head h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.2;
+}
+
+.db-section__head p {
+  margin-top: 0.25rem;
+}
+
+/* --------------------------------------------------------------------------
+   Welcome
+   -------------------------------------------------------------------------- */
+.db-welcome {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(1.75rem, 4vw, 2.75rem);
+  background-color: var(--db-blush-pale);
+}
+
+.db-welcome::before {
+  content: "";
+  position: absolute;
+  right: -70px;
+  bottom: -90px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background-color: var(--db-lavender-pale);
+  pointer-events: none;
+}
+
+.db-welcome__text {
+  position: relative;
+  z-index: 1;
+}
+
+.db-welcome h1 {
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  line-height: 1.1;
+}
+
+.db-welcome__name {
+  margin-top: 0.7rem;
+  color: var(--db-heading);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.db-welcome__text > p:last-child {
+  margin-top: 0.6rem;
+  max-width: 32rem;
+  font-size: 1.05rem;
+}
+
+.db-welcome__badge {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: var(--db-rose-deep);
+  box-shadow: var(--db-shadow-soft);
+}
+
+/* --------------------------------------------------------------------------
+   SOS
+   -------------------------------------------------------------------------- */
+.db-sos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(1.5rem, 3.5vw, 2.25rem);
+  background-color: var(--db-blush);
+  border-color: rgba(199, 125, 152, 0.45);
+  text-align: center;
+}
+
+.db-sos h2 {
+  font-size: 1.6rem;
+}
+
+.db-sos > p:first-of-type {
+  max-width: 24rem;
+  margin-top: 0.5rem;
+  color: var(--db-heading);
+}
+
+.db-sos__ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 176px;
+  height: 176px;
+  margin-block: 1.25rem;
+}
+
+.db-sos__ring::before,
+.db-sos__ring::after {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border: 2px solid var(--db-rose);
+  border-radius: 50%;
+  animation: db-pulse 2.8s ease-out infinite;
+  pointer-events: none;
+}
+
+.db-sos__ring::after {
+  animation-delay: 1.4s;
+}
+
+.db-sos__button,
+.db-sos__button:hover,
+.db-sos__button:focus {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 132px;
+  height: 132px;
+  border: 6px solid var(--db-bg);
+  border-radius: 50%;
+  background-color: var(--db-rose-deep);
+  color: var(--db-bg);
+  font-family: var(--db-font-heading);
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  box-shadow: 0 12px 28px rgba(160, 79, 110, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.db-sos__button:hover {
+  transform: scale(1.06);
+  box-shadow: 0 16px 34px rgba(160, 79, 110, 0.45);
+}
+
+.db-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.8rem 1rem;
+  border-radius: var(--db-radius-sm);
+  background-color: rgba(255, 255, 255, 0.7);
+  color: var(--db-heading);
+  font-size: 0.925rem;
+  text-align: left;
+}
+
+.db-notice svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  color: var(--db-rose-deep);
+}
+
+/* --------------------------------------------------------------------------
+   Quick access
+   -------------------------------------------------------------------------- */
+.db-quick {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.25rem;
+}
+
+.db-quick__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  grid-column: span 2;
+  padding: 1.75rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.db-quick__card:nth-child(4),
+.db-quick__card:nth-child(5) {
+  grid-column: span 3;
+}
+
+.db-quick__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--db-shadow-lift);
+}
+
+.db-quick__card:nth-child(even) .db-icon-badge {
+  background-color: var(--db-lavender-pale);
+}
+
+.db-quick__card h3 {
+  margin-top: 1.1rem;
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.db-quick__card p {
+  margin-top: 0.5rem;
+}
+
+.db-quick__link {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.db-quick__card p + .db-quick__link {
+  margin-top: 1.4rem;
+}
+
+.db-quick__link svg {
+  transition: transform 0.2s ease;
+}
+
+.db-quick__link:hover svg {
+  transform: translateX(3px);
+}
+
+/* --------------------------------------------------------------------------
+   Emergency contacts overview
+   -------------------------------------------------------------------------- */
+.db-contacts {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.5rem, 3.5vw, 2.25rem);
+}
+
+.db-contacts h2 {
+  font-size: 1.6rem;
+}
+
+.db-contacts__intro {
+  margin-top: 0.25rem;
+}
+
+.db-empty {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  padding: 2rem 1.25rem;
+  border: 2px dashed rgba(184, 165, 214, 0.8);
+  border-radius: var(--db-radius-md);
+  background-color: var(--db-bg);
+  text-align: center;
+}
+
+.db-empty h3 {
+  margin-top: 0.4rem;
+  font-size: 1.25rem;
+}
+
+.db-empty p {
+  max-width: 24rem;
+  margin-bottom: 0.6rem;
+}
+
+/* --------------------------------------------------------------------------
+   Safety reminder
+   -------------------------------------------------------------------------- */
+.db-reminder {
+  padding: clamp(1.5rem, 3.5vw, 2.25rem);
+  background-color: var(--db-lavender-pale);
+  border-color: rgba(184, 165, 214, 0.7);
+}
+
+.db-reminder h2 {
+  margin-top: 1rem;
+  font-size: 1.6rem;
+}
+
+.db-reminder p {
+  margin-top: 0.6rem;
+  color: var(--db-heading);
+}
+
+/* --------------------------------------------------------------------------
+   Animations
+   -------------------------------------------------------------------------- */
+@keyframes db-pulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive: collapsed navigation (tablet and below)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .db-nav-toggle {
+    display: grid;
+  }
+
+  .db-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1rem 1.25rem 1.5rem;
+    background-color: var(--db-bg);
+    border-bottom: 1px solid rgba(73, 54, 79, 0.1);
+    box-shadow: 0 18px 30px rgba(73, 54, 79, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+
+  .db-nav.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .db-nav__links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.15rem;
+    margin-inline: 0;
+  }
+
+  .db-nav__link,
+  .db-nav__link:hover,
+  .db-nav__link:focus {
+    display: block;
+    padding: 0.8rem 1rem;
+    border-radius: var(--db-radius-sm);
+  }
+
+  .db-nav__account {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(73, 54, 79, 0.1);
+  }
+
+  .db-nav__account .db-btn {
+    width: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive: tablet layout
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .db-top,
+  .db-bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .db-quick {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .db-quick__card,
+  .db-quick__card:nth-child(4) {
+    grid-column: span 1;
+  }
+
+  .db-quick__card:nth-child(5) {
+    grid-column: span 2;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive: mobile layout
+   -------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  .db-quick {
+    grid-template-columns: 1fr;
+  }
+
+  .db-quick__card,
+  .db-quick__card:nth-child(4),
+  .db-quick__card:nth-child(5) {
+    grid-column: span 1;
+  }
+
+  .db-welcome__badge {
+    display: none;
+  }
+
+  .db-quick__link {
+    width: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .db-page *,
+  .db-page *::before,
+  .db-page *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}

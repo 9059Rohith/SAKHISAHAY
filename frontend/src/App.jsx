@@ -11,6 +11,7 @@ import {
 import "./App.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
 
 /* ==========================================================================
    DATA
@@ -756,7 +757,7 @@ function AppRoutes() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<PlaceholderPage title="Dashboard" />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route
           path="/emergency-contacts"
           element={<PlaceholderPage title="Emergency Contacts" />}
