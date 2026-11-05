@@ -1,0 +1,506 @@
+/* ==========================================================
+   SAKHISAHAY - Safety Information & Guidance
+   All classes are prefixed with "safety-" to avoid conflicts.
+   Palette:
+     Primary lavender  #B8A5D6
+     Blush pink        #F5DCE5
+     Background        #FFFAFC
+     Dusty rose accent #C77D98
+     Headings          #49364F
+     Body text         #6B6570
+   ========================================================== */
+
+.safety-page {
+  --safety-lavender: #b8a5d6;
+  --safety-blush: #f5dce5;
+  --safety-bg: #fffafc;
+  --safety-rose: #c77d98;
+  --safety-heading: #49364f;
+  --safety-text: #6b6570;
+  --safety-white: #ffffff;
+  --safety-border: rgba(184, 165, 214, 0.35);
+  --safety-shadow: 0 6px 24px rgba(73, 54, 79, 0.08);
+
+  min-height: 100vh;
+  background: var(--safety-bg);
+  color: var(--safety-text);
+  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.safety-page *,
+.safety-page *::before,
+.safety-page *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- Header ---------- */
+
+.safety-header {
+  background: linear-gradient(135deg, var(--safety-lavender) 0%, var(--safety-blush) 100%);
+  border-bottom: 1px solid var(--safety-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.safety-header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.safety-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.safety-brand-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--safety-white);
+  color: var(--safety-rose);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(73, 54, 79, 0.12);
+}
+
+.safety-brand-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--safety-heading);
+}
+
+.safety-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--safety-white);
+  color: var(--safety-heading);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(73, 54, 79, 0.1);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.safety-back-link:hover {
+  background: var(--safety-rose);
+  color: var(--safety-white);
+  transform: translateX(-2px);
+}
+
+.safety-back-link:focus-visible,
+.safety-card-toggle:focus-visible,
+.safety-emergency-button:focus-visible,
+.safety-helpline-number:focus-visible,
+.safety-external-link:focus-visible {
+  outline: 3px solid var(--safety-heading);
+  outline-offset: 3px;
+}
+
+/* ---------- Main layout ---------- */
+
+.safety-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+}
+
+.safety-intro {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.safety-title {
+  margin: 0 0 10px;
+  font-size: clamp(1.7rem, 4.5vw, 2.4rem);
+  line-height: 1.2;
+  color: var(--safety-heading);
+}
+
+.safety-subtitle {
+  margin: 0 auto;
+  max-width: 600px;
+  font-size: 1.05rem;
+  color: var(--safety-text);
+}
+
+/* ---------- Emergency banner ---------- */
+
+.safety-emergency {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 22px;
+  margin-bottom: 28px;
+  background: var(--safety-blush);
+  border: 2px solid var(--safety-rose);
+  border-radius: 18px;
+  box-shadow: var(--safety-shadow);
+}
+
+.safety-emergency-icon {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--safety-rose);
+  color: var(--safety-white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.safety-emergency-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.safety-emergency-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.safety-emergency-title {
+  margin: 0 0 4px;
+  font-size: 1.25rem;
+  color: var(--safety-heading);
+}
+
+.safety-emergency-text p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--safety-text);
+}
+
+.safety-emergency-text strong {
+  color: var(--safety-heading);
+}
+
+.safety-emergency-button {
+  flex-shrink: 0;
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: var(--safety-rose);
+  color: var(--safety-white);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(199, 125, 152, 0.4);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.safety-emergency-button:hover {
+  background: var(--safety-heading);
+  transform: translateY(-2px);
+}
+
+/* ---------- Accordion cards ---------- */
+
+.safety-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.safety-card {
+  background: var(--safety-white);
+  border: 1px solid var(--safety-border);
+  border-radius: 18px;
+  box-shadow: var(--safety-shadow);
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.safety-card:hover,
+.safety-card-open {
+  border-color: var(--safety-lavender);
+}
+
+.safety-card-heading {
+  margin: 0;
+  font-size: inherit;
+}
+
+.safety-card-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+}
+
+.safety-card-open .safety-card-toggle {
+  background: linear-gradient(90deg, rgba(184, 165, 214, 0.18), rgba(245, 220, 229, 0.35));
+}
+
+.safety-card-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--safety-blush);
+  color: var(--safety-rose);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.safety-card-open .safety-card-icon {
+  background: var(--safety-lavender);
+  color: var(--safety-white);
+}
+
+.safety-card-titles {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.safety-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--safety-heading);
+}
+
+.safety-card-summary {
+  font-size: 0.9rem;
+  color: var(--safety-text);
+}
+
+.safety-card-chevron {
+  flex-shrink: 0;
+  display: inline-flex;
+  color: var(--safety-rose);
+  transition: transform 0.25s ease;
+}
+
+.safety-card-open .safety-card-chevron {
+  transform: rotate(180deg);
+}
+
+.safety-card-panel {
+  padding: 4px 20px 22px;
+  animation: safety-fade-in 0.25s ease;
+}
+
+.safety-card-panel[hidden] {
+  display: none;
+}
+
+@keyframes safety-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Tips ---------- */
+
+.safety-tips,
+.safety-helplines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.safety-tip {
+  padding: 14px 16px 14px 18px;
+  background: var(--safety-bg);
+  border-left: 4px solid var(--safety-lavender);
+  border-radius: 0 12px 12px 0;
+}
+
+.safety-tip-title {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--safety-heading);
+}
+
+.safety-tip-text {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--safety-text);
+}
+
+/* ---------- Helplines ---------- */
+
+.safety-helpline {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: var(--safety-bg);
+  border: 1px solid var(--safety-border);
+  border-radius: 14px;
+}
+
+.safety-helpline-number {
+  flex-shrink: 0;
+  min-width: 76px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--safety-rose);
+  color: var(--safety-white);
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+a.safety-helpline-number:hover {
+  background: var(--safety-heading);
+}
+
+.safety-helpline-portal {
+  background: var(--safety-lavender);
+  font-size: 1rem;
+}
+
+.safety-helpline-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.safety-external-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  color: var(--safety-rose);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  word-break: break-all;
+}
+
+.safety-external-link:hover {
+  color: var(--safety-heading);
+}
+
+/* ---------- Disclaimer ---------- */
+
+.safety-disclaimer {
+  margin: 28px 0 0;
+  padding: 14px 18px;
+  background: var(--safety-blush);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: var(--safety-text);
+  text-align: center;
+}
+
+.safety-disclaimer strong {
+  color: var(--safety-heading);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+  .safety-header-inner {
+    padding: 12px 16px;
+  }
+
+  .safety-main {
+    padding: 24px 16px 40px;
+  }
+
+  .safety-emergency {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .safety-emergency-icon {
+    align-self: center;
+  }
+
+  .safety-emergency-button {
+    text-align: center;
+  }
+
+  .safety-card-toggle {
+    padding: 14px 14px;
+    gap: 12px;
+  }
+
+  .safety-card-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .safety-card-title {
+    font-size: 1.05rem;
+  }
+
+  .safety-card-summary {
+    display: none;
+  }
+
+  .safety-card-panel {
+    padding: 4px 14px 18px;
+  }
+
+  .safety-helpline {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .safety-helpline-number {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 380px) {
+  .safety-brand-name {
+    font-size: 1.05rem;
+    letter-spacing: 0.08em;
+  }
+
+  .safety-back-link {
+    padding: 7px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .safety-page *,
+  .safety-page *::before,
+  .safety-page *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

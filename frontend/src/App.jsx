@@ -16,6 +16,8 @@ import EmergencyContacts from "./pages/EmergencyContacts";
 import Location from "./pages/Location";
 import Chatbot from "./pages/Chatbot";
 import Reporting from "./pages/Reporting";
+import SafetyInformation from "./pages/SafetyInformation";
+
 
 /* ==========================================================================
    DATA
@@ -770,6 +772,7 @@ function AppRoutes() {
         <Route path="/location" element={<Location />} />
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/reporting" element={<Reporting />} />
+        <Route path="/safety-information" element={<SafetyInformation />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
