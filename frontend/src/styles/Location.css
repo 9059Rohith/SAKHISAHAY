@@ -1,0 +1,521 @@
+/* ==========================================================
+   SAKHISAHAY – Location Sharing page
+   All classes are prefixed with "loc-" to avoid clashing with
+   Dashboard.css, EmergencyContacts.css and other styles.
+   ========================================================== */
+
+.loc-page {
+  --loc-lavender: #b8a5d6;
+  --loc-blush: #f5dce5;
+  --loc-bg: #fffafc;
+  --loc-rose: #c77d98;
+  --loc-heading: #49364f;
+  --loc-text: #6b6570;
+
+  --loc-lavender-soft: #efe9f8;
+  --loc-rose-dark: #b06582;
+  --loc-border: #eee3ec;
+  --loc-error: #b3405f;
+  --loc-error-bg: #fdeef2;
+  --loc-success: #4e7a62;
+  --loc-success-bg: #eaf5ee;
+
+  --loc-radius-lg: 24px;
+  --loc-radius-md: 16px;
+  --loc-radius-pill: 999px;
+  --loc-shadow: 0 8px 24px rgba(73, 54, 79, 0.08);
+  --loc-shadow-hover: 0 14px 32px rgba(73, 54, 79, 0.13);
+
+  min-height: 100vh;
+  background: var(--loc-bg);
+  color: var(--loc-text);
+  font-family: inherit;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.loc-page *,
+.loc-page *::before,
+.loc-page *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- Top bar ---------- */
+
+.loc-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.loc-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.loc-brand-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--loc-lavender), var(--loc-rose));
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(199, 125, 152, 0.3);
+}
+
+.loc-brand-name {
+  color: var(--loc-heading);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.loc-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1.5px solid var(--loc-lavender);
+  border-radius: var(--loc-radius-pill);
+  background: #fff;
+  color: var(--loc-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.loc-back-link:hover {
+  background: var(--loc-lavender-soft);
+  transform: translateX(-2px);
+  box-shadow: var(--loc-shadow);
+}
+
+/* ---------- Main + hero ---------- */
+
+.loc-main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 8px 24px 56px;
+}
+
+.loc-hero {
+  margin-bottom: 28px;
+  padding: 32px;
+  border-radius: var(--loc-radius-lg);
+  background: linear-gradient(135deg, var(--loc-blush), var(--loc-lavender-soft));
+  box-shadow: var(--loc-shadow);
+}
+
+.loc-title {
+  margin: 0 0 8px;
+  color: var(--loc-heading);
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
+  line-height: 1.2;
+}
+
+.loc-subtitle {
+  max-width: 64ch;
+  margin: 0;
+  font-size: 1.02rem;
+}
+
+/* ---------- Layout & cards ---------- */
+
+.loc-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: stretch;
+}
+
+.loc-card {
+  padding: 30px;
+  border: 1px solid var(--loc-border);
+  border-radius: var(--loc-radius-lg);
+  background: #fff;
+  box-shadow: var(--loc-shadow);
+}
+
+.loc-card-title {
+  margin: 0 0 12px;
+  color: var(--loc-heading);
+  font-size: 1.25rem;
+}
+
+/* ---------- Detect card ---------- */
+
+.loc-detect-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.loc-detect-icon {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  margin-bottom: 16px;
+  border-radius: 22px;
+  background: var(--loc-blush);
+  color: var(--loc-rose-dark);
+}
+
+.loc-detect-text {
+  max-width: 46ch;
+  margin: 0 0 22px;
+}
+
+.loc-live {
+  width: 100%;
+}
+
+.loc-loading-text {
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  border-radius: var(--loc-radius-md);
+  background: var(--loc-lavender-soft);
+  color: var(--loc-heading);
+  font-size: 0.92rem;
+}
+
+/* ---------- Buttons ---------- */
+
+.loc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border: 1.5px solid transparent;
+  border-radius: var(--loc-radius-pill);
+  font: inherit;
+  font-size: 0.93rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.loc-btn:hover {
+  transform: translateY(-2px);
+}
+
+.loc-btn:active {
+  transform: translateY(0);
+}
+
+.loc-btn:focus-visible,
+.loc-back-link:focus-visible {
+  outline: 3px solid var(--loc-lavender);
+  outline-offset: 3px;
+}
+
+.loc-btn-primary {
+  background: linear-gradient(135deg, var(--loc-rose), var(--loc-lavender));
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(199, 125, 152, 0.35);
+}
+
+.loc-btn-primary:hover {
+  box-shadow: 0 10px 22px rgba(199, 125, 152, 0.45);
+}
+
+.loc-btn-large {
+  width: 100%;
+  padding: 16px 28px;
+  font-size: 1.08rem;
+}
+
+.loc-btn-primary:disabled {
+  cursor: progress;
+  opacity: 0.85;
+  transform: none;
+  box-shadow: 0 4px 12px rgba(199, 125, 152, 0.25);
+}
+
+.loc-btn-outline {
+  background: #fff;
+  border-color: var(--loc-lavender);
+  color: var(--loc-heading);
+}
+
+.loc-btn-outline:hover {
+  background: var(--loc-lavender-soft);
+}
+
+.loc-btn-ghost {
+  background: #fff;
+  border-color: var(--loc-rose);
+  color: var(--loc-rose-dark);
+}
+
+.loc-btn-ghost:hover {
+  background: var(--loc-blush);
+}
+
+/* ---------- Loading spinner ---------- */
+
+.loc-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: loc-spin 0.8s linear infinite;
+}
+
+@keyframes loc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Error alert ---------- */
+
+.loc-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: var(--loc-radius-md);
+  background: var(--loc-error-bg);
+  border: 1px solid rgba(179, 64, 95, 0.25);
+}
+
+.loc-alert-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--loc-error);
+}
+
+.loc-alert h3 {
+  margin: 0 0 4px;
+  color: var(--loc-error);
+  font-size: 1rem;
+}
+
+.loc-alert p {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+/* ---------- Results ---------- */
+
+.loc-coords {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 0 0 12px;
+}
+
+.loc-coord {
+  padding: 16px;
+  border-radius: var(--loc-radius-md);
+  background: var(--loc-bg);
+  border: 1px solid var(--loc-border);
+}
+
+.loc-coord dt {
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.loc-coord dd {
+  margin: 0;
+  color: var(--loc-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.loc-accuracy {
+  margin: 0 0 20px;
+  font-size: 0.88rem;
+}
+
+.loc-result-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.loc-result-actions .loc-btn {
+  flex: 1 1 200px;
+}
+
+.loc-feedback {
+  margin: 16px 0 0;
+  padding: 10px 16px;
+  border-radius: var(--loc-radius-md);
+  font-size: 0.9rem;
+}
+
+.loc-feedback-success {
+  background: var(--loc-success-bg);
+  color: var(--loc-success);
+}
+
+.loc-feedback-error {
+  background: var(--loc-error-bg);
+  color: var(--loc-error);
+}
+
+.loc-feedback strong {
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+/* ---------- Placeholder ---------- */
+
+.loc-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 24px;
+  border: 2px dashed var(--loc-lavender);
+  border-radius: var(--loc-radius-lg);
+  text-align: center;
+}
+
+.loc-placeholder-icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
+  border-radius: 50%;
+  background: var(--loc-lavender-soft);
+  color: #7d63a8;
+}
+
+.loc-placeholder p {
+  max-width: 34ch;
+  margin: 0;
+}
+
+/* ---------- Information cards ---------- */
+
+.loc-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.loc-info-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid var(--loc-border);
+  border-radius: var(--loc-radius-lg);
+  background: #fff;
+  box-shadow: var(--loc-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.loc-info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--loc-shadow-hover);
+}
+
+.loc-info-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--loc-blush);
+  color: var(--loc-rose-dark);
+}
+
+.loc-info-card h2 {
+  margin: 0 0 6px;
+  color: var(--loc-heading);
+  font-size: 1.1rem;
+}
+
+.loc-info-card p {
+  margin: 0;
+  font-size: 0.94rem;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .loc-layout,
+  .loc-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .loc-topbar {
+    padding: 16px;
+  }
+
+  .loc-main {
+    padding: 4px 16px 40px;
+  }
+
+  .loc-hero {
+    padding: 22px 18px;
+  }
+
+  .loc-card {
+    padding: 22px 18px;
+  }
+
+  .loc-back-link {
+    padding: 8px 14px;
+    font-size: 0.88rem;
+  }
+
+  .loc-coords {
+    grid-template-columns: 1fr;
+  }
+
+  .loc-result-actions .loc-btn {
+    flex: 1 1 100%;
+  }
+
+  .loc-info-card {
+    padding: 20px 18px;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .loc-page *,
+  .loc-page *::before,
+  .loc-page *::after {
+    transition: none !important;
+  }
+
+  .loc-btn:hover,
+  .loc-info-card:hover,
+  .loc-back-link:hover {
+    transform: none;
+  }
+
+  .loc-spinner {
+    animation-duration: 2s;
+  }
+}

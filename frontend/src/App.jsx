@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import EmergencyContacts from "./pages/EmergencyContacts";
+import Location from "./pages/Location";
 
 /* ==========================================================================
    DATA
@@ -764,7 +765,7 @@ function AppRoutes() {
           element={<EmergencyContacts />}
         />
         <Route path="/sos" element={<PlaceholderPage title="Emergency SOS" />} />
-        <Route path="/location" element={<PlaceholderPage title="Live Location" />} />
+        <Route path="/location" element={<Location />} />
         <Route path="/chatbot" element={<PlaceholderPage title="AI Safety Chatbot" />} />
         <Route path="/reporting" element={<PlaceholderPage title="Report an Incident" />} />
         <Route path="*" element={<Navigate to="/" replace />} />
