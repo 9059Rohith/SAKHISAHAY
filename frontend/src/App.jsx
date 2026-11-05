@@ -9,6 +9,8 @@ import {
   useLocation,
 } from "react-router-dom";
 import "./App.css";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 /* ==========================================================================
    DATA
@@ -752,8 +754,8 @@ function AppRoutes() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<PlaceholderPage title="Login" />} />
-        <Route path="/register" element={<PlaceholderPage title="Get Started" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<PlaceholderPage title="Dashboard" />} />
         <Route
           path="/emergency-contacts"
