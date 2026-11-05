@@ -17,6 +17,7 @@ import Location from "./pages/Location";
 import Chatbot from "./pages/Chatbot";
 import Reporting from "./pages/Reporting";
 import SafetyInformation from "./pages/SafetyInformation";
+import SOS from "./pages/SOS";
 
 
 /* ==========================================================================
@@ -768,7 +769,7 @@ function AppRoutes() {
           path="/emergency-contacts"
           element={<EmergencyContacts />}
         />
-        <Route path="/sos" element={<PlaceholderPage title="Emergency SOS" />} />
+        <Route path="/sos" element={<SOS />} />
         <Route path="/location" element={<Location />} />
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/reporting" element={<Reporting />} />
