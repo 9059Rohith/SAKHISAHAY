@@ -15,6 +15,7 @@ import Dashboard from "./pages/Dashboard";
 import EmergencyContacts from "./pages/EmergencyContacts";
 import Location from "./pages/Location";
 import Chatbot from "./pages/Chatbot";
+import Reporting from "./pages/Reporting";
 
 /* ==========================================================================
    DATA
@@ -768,7 +769,7 @@ function AppRoutes() {
         <Route path="/sos" element={<PlaceholderPage title="Emergency SOS" />} />
         <Route path="/location" element={<Location />} />
         <Route path="/chatbot" element={<Chatbot />} />
-        <Route path="/reporting" element={<PlaceholderPage title="Report an Incident" />} />
+        <Route path="/reporting" element={<Reporting />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
