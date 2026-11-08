@@ -12,6 +12,14 @@ test("reference UI, walkthrough, mobile layout and reduced motion", async ({ pag
   await expect(page.getByRole("heading", { name: "Share the journey" })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.locator(".night-home > section")).toHaveCount(6);
+  const images = page.locator(".scene-background");
+  expect(new Set(await images.evaluateAll((nodes) => nodes.map((e) => e.getAttribute("src")))).size).toBe(5);
+  for (const section of await page.locator(".story-scene").all()) {
+    await section.scrollIntoViewIfNeeded();
+    await expect(section.locator(".animated-heading")).toHaveClass(/is-visible/);
+    await expect.poll(() => section.locator(".scene-background").evaluate((e) => e.complete && e.naturalWidth > 0)).toBe(true);
+  }
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.getByRole("button", { name: "Toggle navigation" }).click();

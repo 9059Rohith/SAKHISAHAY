@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Lotus } from "./Icons";
+import { AnimatedHeading } from "./Motion";
 
 export default function PageShell({ title, lead, children }) {
   return (
@@ -12,7 +13,7 @@ export default function PageShell({ title, lead, children }) {
         <Link to="/dashboard">← Back to Dashboard</Link>
       </header>
       <main className="page-content">
-        <h1>{title}</h1>
+        <AnimatedHeading as="h1">{title}</AnimatedHeading>
         {lead && <p className="page-lead">{lead}</p>}
         {children}
       </main>

@@ -9,6 +9,7 @@ import {
 import { AuthProvider, Protected } from "./lib/auth";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Home from "./pages/Home";
+import { RouteAtmosphere } from "./components/Motion";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -34,6 +35,7 @@ import "@fontsource/cormorant-garamond/latin-500.css";
 import "@fontsource/cormorant-garamond/latin-500-italic.css";
 import "@fontsource/cormorant-garamond/latin-600.css";
 import "./styles/Night.css";
+import "./styles/Story.css";
 
 function AppRoutes() {
   const { pathname } = useLocation();
@@ -43,6 +45,7 @@ function AppRoutes() {
   return (
     <ErrorBoundary>
       <AuthProvider>
+        <RouteAtmosphere />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />

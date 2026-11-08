@@ -44,6 +44,10 @@ def create_app(settings=None, database=None):
     """Construct the API; test databases can be injected without production fallbacks."""
     settings = settings or Settings()
     repo = Repository(settings, database)
+    # Production indexes are provisioned by scripts.migrate before deployment.
+    # Reissuing every DDL command on every serverless cold start adds seconds.
+    if settings.app_env == "production":
+        repo.indexes_ready = True
 
     @asynccontextmanager
     async def lifespan(app):

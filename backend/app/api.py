@@ -36,21 +36,21 @@ def set_session(response, tokens, settings):
         access,
         httponly=True,
         max_age=settings.access_token_expire_minutes * 60,
-        **options
+        **options,
     )
     response.set_cookie(
         "refresh_token",
         refresh,
         httponly=True,
         max_age=settings.refresh_token_expire_days * 86400,
-        **options
+        **options,
     )
     response.set_cookie(
         "csrf_token",
         csrf,
         httponly=False,
         max_age=settings.refresh_token_expire_days * 86400,
-        **options
+        **options,
     )
 
 

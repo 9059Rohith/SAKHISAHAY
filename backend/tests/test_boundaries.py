@@ -225,7 +225,7 @@ async def test_ai_provider_failure_never_persists_fake_messages(user, monkeypatc
         "AsyncClient",
         lambda **kwargs: real_client(
             transport=httpx.MockTransport(lambda req: httpx.Response(status, json=payload)),
-            **kwargs
+            **kwargs,
         ),
     )
     assert (

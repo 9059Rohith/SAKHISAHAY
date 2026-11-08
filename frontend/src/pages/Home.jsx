@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon, Lotus } from "../components/Icons";
 import { useAuth } from "../lib/auth";
+import HomeSections from "../components/HomeSections";
+import { useScrollMotion } from "../components/Motion";
 
 const tools = [
   {
@@ -159,6 +161,7 @@ function Demo({ close }) {
 export default function Home() {
   const { user } = useAuth();
   const root = useRef(null);
+  useScrollMotion(root);
   const [demo, setDemo] = useState(false);
   const [menu, setMenu] = useState(false);
   const [notifications, setNotifications] = useState(false);
@@ -205,6 +208,7 @@ export default function Home() {
   return (
     <div className="night-home" ref={root}>
       <div className="landscape" aria-hidden="true" />
+      <div className="scroll-progress" aria-hidden="true" />
       <div className="petals" aria-hidden="true">
         {Array.from({ length: 9 }, (_, i) => (
           <i key={i} style={{ "--i": i }} />
@@ -354,36 +358,7 @@ export default function Home() {
           </div>
         </main>
       </section>
-      <section className="home-below" aria-labelledby="prepared-title">
-        <Lotus size={42} />
-        <h2 id="prepared-title">
-          A little preparation.
-          <br />
-          <em>A world of reassurance.</em>
-        </h2>
-        <p>
-          Your people. Your journey. Your peace of mind.
-          <br />
-          Keep your safety tools together in one personal space.
-        </p>
-        <div className="below-links">
-          <Link to="/emergency-contacts">
-            Build your safety circle <Icon name="arrow" size={18} />
-          </Link>
-          <Link to="/chatbot">
-            Talk to your safety assistant <Icon name="arrow" size={18} />
-          </Link>
-        </div>
-        <p className="delivery-note">
-          SOS helps you contact people you trust. Calls and SMS require your
-          action. In immediate danger in India, <a href="tel:112">call 112</a>.
-        </p>
-        <footer>
-          © {new Date().getFullYear()} SakhiSahay{" "}
-          <span>Made for safer tomorrows.</span>
-          <Link to="/safety-information">Safety resources</Link>
-        </footer>
-      </section>
+      <HomeSections signedIn={Boolean(user)} />
       {demo && <Demo close={() => setDemo(false)} />}
     </div>
   );

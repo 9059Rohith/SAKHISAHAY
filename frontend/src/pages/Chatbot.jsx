@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import "../styles/Chatbot.css";
 import { api, errorText } from "../lib/api";
 
@@ -85,9 +85,12 @@ const SUGGESTED_QUESTIONS = {
 };
 
 function Chatbot() {
+  const [searchParams] = useSearchParams();
   const [language, setLanguage] = useState("en");
   const [messages, setMessages] = useState([]);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(() =>
+    (searchParams.get("question") || "").slice(0, 500),
+  );
   const [error, setError] = useState("");
   const [isReplying, setIsReplying] = useState(false);
 

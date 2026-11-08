@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /share/
+Disallow: /api/
+Sitemap: https://sakhisahay-9059.vercel.app/sitemap.xml

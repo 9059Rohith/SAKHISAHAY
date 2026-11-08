@@ -1,0 +1,11 @@
+# Security and external requirements
+
+Verified controls: Argon2 passwords; strong production secret validation; httpOnly/Secure/SameSite cookies; CSRF and Origin checks; strict request schemas; explicit response schemas; generic failed login/recovery messages; account lockout; Mongo-backed rate limits; durable refresh-family revocation; hashed recovery/share/reset/refresh secrets; owner-scoped queries; private report and chat deletion; one-hour expiring shares; security headers and same-origin CSP; no client API keys; ignored environment/private files; secret-shaped-value scan. Authentication/security tests include refresh races, cross-account access, unknown-field mass assignment, NoSQL-shaped inputs, invalid tokens and provider/database failures.
+
+Threats: stolen devices/sessions, guessed credentials, capability-link disclosure, malicious form payloads, cross-account access, AI misuse and service outages. Users should protect recovery codes and share links. AI questions are sent to OpenAI; store=false is requested. Do not put identifying details in questions. Administrative summary exposes aggregate counts rather than incident content.
+
+Python and npm dependency audits found zero known vulnerabilities at implementation time. This does not replace a penetration test. ZAP/Lighthouse and high-concurrency load tests are not represented as completed. The local Docker daemon was unavailable, so Docker configuration is supplied without a local container verification claim.
+
+SMTP credentials, SPF/DKIM/DMARC, automatic SMS delivery, custom DNS, Sentry, independent uptime alerts, Atlas backup scheduling/PITR and network/least-privilege administrative settings require the relevant provider accounts. They have not been silently invented or marked configured. The app exposes truthful unavailable states for email, provides recovery codes, and uses user-confirmed native SMS/call actions.
+
+Use the Atlas dashboard to restrict the database user to the application database and configure suitable network access. The supplied database credentials permit the application connection; no claim is made about settings unavailable through the supplied database URI. Rotate credentials through their providers and update encrypted Vercel variables; never commit replacements.
