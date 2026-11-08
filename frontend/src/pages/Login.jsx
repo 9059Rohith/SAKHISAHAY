@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../lib/auth";
+import { errorText } from "../lib/api";
 import "../styles/Auth.css";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -25,6 +27,11 @@ function Login() {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showNotice, setShowNotice] = useState(false);
+  const [serverError, setServerError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -41,7 +48,7 @@ function Login() {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const validationErrors = validate(formData);
@@ -55,11 +62,21 @@ function Login() {
       return;
     }
 
-    // No backend call and no authentication yet.
-    // Clear the password from component state and show an informational notice.
-    setFormData((prev) => ({ ...prev, password: "" }));
-    setShowPassword(false);
-    setShowNotice(true);
+    if (busy) return;
+    setBusy(true);
+    setServerError("");
+    try {
+      await auth.login({
+        email: formData.email.trim(),
+        password: formData.password,
+      });
+      navigate(location.state?.from || "/dashboard");
+    } catch (error) {
+      setServerError(errorText(error));
+      setShowNotice(true);
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -98,13 +115,14 @@ function Login() {
         </header>
 
         {showNotice && (
-          <div className="auth-notice" role="status">
-            <strong>Login is not available yet.</strong> Your details look valid,
-            but authentication will be available after backend integration.
-            Nothing has been sent or saved.
+          <div className="auth-notice" role="alert">
+            {serverError}
           </div>
         )}
 
+        <p style={{ marginBottom: 15 }}>
+          <Link to="/forgot-password">Forgot password?</Link>
+        </p>
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="auth-field">
             <label htmlFor="login-email">Email address</label>
@@ -174,7 +192,12 @@ function Login() {
             <span className="auth-badge">Unavailable for now</span>
           </div>
 
-          <button type="submit" className="auth-submit">
+          <button
+            type="submit"
+            disabled={busy}
+            aria-busy={busy}
+            className="auth-submit"
+          >
             Login
           </button>
         </form>

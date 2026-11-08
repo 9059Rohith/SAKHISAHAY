@@ -1,0 +1,11 @@
+# Accepted visual reference
+
+The user supplied a 1672×941 screenshot and requested matching composition, parallax and font animations. It supersedes the original light landing page. Keep React and all existing application features; restyle every screen in the same visual system.
+
+Primary viewport: full-bleed cherry-blossom/mountain/city dusk illustration; dark navy sky, pink sunset and violet moon. Header at x~196–1588, y25–100. Logo lotus and serif SakhiSahay. Home/Safety Tools/Resources/Community, notifications and account controls. Main left x238–770,y228–548; eyebrow, white-to-pink serif title, pink curved underline, two-line description, gradient Get Started and outlined Watch Demo. Right x844–1584,y170–565; 2×3 glass tool cards. Banner x849–1588,y591–743. At 1672px, title ~110px; UI font ~20px, description ~23px; card radius ~22px, gap ~16px. Use fluid scale from viewport width with sensible min/max values and stack at mobile breakpoints.
+
+Palette: navy #0b1331; violet #635a96; white #fff8ff; pink #f787bb; hot pink #ef5da0; card border #a18bc7. Heading font Cormorant Garamond (serif), UI Inter. Self-host fonts. Header translucent navy; tool cards translucent violet with blur and thin lavender border; SOS pink glow. All hit targets functional.
+
+Motion: requestAnimationFrame pointer parallax + bounded scroll displacement on illustrated layer, independently floating petals, staggered character/word entrance, title sheen, card hover lift and SOS edge glow. prefers-reduced-motion disables movement. No motion uses React state on every pointer/scroll frame. Watch Demo opens an accessible actual animated walkthrough dialog. Community Support leads to private reporting and official external resources, not an invented public discussion network.
+
+Asset: imagegen precise background extraction/inpainting from user reference, removing UI while preserving original illustration composition. Native controls and copy remain HTML. The original screenshot may supply the decorative solidarity banner as a CSS-clipped illustration with accessible text alternative. QA compares reference and browser captures at 1672×941 and checks 390×844.

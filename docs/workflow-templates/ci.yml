@@ -1,0 +1,72 @@
+name: Quality and security
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:7.0
+        ports: ["27017:27017"]
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.adminCommand({ping:1}).ok'"
+          --health-interval 10s --health-timeout 5s --health-retries 10
+    env:
+      APP_ENV: test
+      MONGODB_URI: mongodb://127.0.0.1:27017
+      MONGODB_DB_NAME: sakhi_ci
+      RATE_LIMIT_ENABLED: "false"
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - uses: actions/setup-node@v4
+        with: { node-version: "24", cache: npm, cache-dependency-path: frontend/package-lock.json }
+      - run: pip install -r backend/requirements-dev.txt
+      - run: python -m ruff check backend
+      - run: python -m black --check backend api
+      - run: python -m mypy backend/app
+      - run: python -m pytest --cov=backend/app --cov-fail-under=85 --cov-report=xml --cov-report=json
+      - run: npm --prefix frontend ci
+      - run: npm --prefix frontend run lint && npm --prefix frontend run typecheck && npm --prefix frontend run format:check
+      - run: npm --prefix frontend test && npm --prefix frontend run build
+      - run: python -m pip_audit -r requirements.txt
+      - run: npm --prefix frontend audit --audit-level=high
+      - run: python -m scripts.secret_scan
+      - run: python -m scripts.export_api && git diff --exit-code docs/openapi.json docs/postman.json
+      - run: docker build -f backend/Dockerfile -t sakhi-api:ci . && docker build -f frontend/Dockerfile -t sakhi-web:ci .
+      - run: npx --prefix frontend playwright install --with-deps chromium
+      - name: Start real stack for browser tests
+        run: |
+          python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --no-access-log > /tmp/sakhi-api.log 2>&1 &
+          npm --prefix frontend run dev -- --host 127.0.0.1 > /tmp/sakhi-web.log 2>&1 &
+          python - <<'PY'
+          import time, urllib.request
+          for attempt in range(60):
+              try:
+                  urllib.request.urlopen('http://127.0.0.1:8000/ready',timeout=3)
+                  urllib.request.urlopen('http://127.0.0.1:5173',timeout=3)
+                  break
+              except Exception:
+                  time.sleep(1)
+          else:
+              raise SystemExit('Stack did not become ready')
+          PY
+      - run: npm --prefix frontend run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quality-evidence
+          path: |
+            coverage.xml
+            coverage.json
+            frontend/test-results
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: gitleaks/gitleaks-action@v2
+        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }

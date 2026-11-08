@@ -94,7 +94,9 @@
   border-radius: 999px;
   border: 1px solid var(--rp-secondary);
   background: var(--rp-bg);
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .reporting-back-link:hover {
@@ -202,7 +204,9 @@
   text-decoration: none;
   white-space: nowrap;
   box-shadow: var(--rp-shadow);
-  transition: background 0.2s ease, transform 0.1s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
 }
 
 .reporting-emergency-call:hover {
@@ -245,7 +249,9 @@
   border-radius: 18px;
   box-shadow: var(--rp-shadow);
   overflow: hidden;
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .reporting-expandable.is-open {
@@ -310,7 +316,9 @@
   display: grid;
   grid-template-rows: 0fr;
   visibility: hidden;
-  transition: grid-template-rows 0.3s ease, visibility 0.3s;
+  transition:
+    grid-template-rows 0.3s ease,
+    visibility 0.3s;
 }
 
 .reporting-expandable.is-open .reporting-panel {

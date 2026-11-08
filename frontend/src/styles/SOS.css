@@ -24,7 +24,13 @@
   min-height: 100vh;
   background: var(--sos-bg);
   color: var(--sos-text);
-  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
   line-height: 1.6;
   box-sizing: border-box;
 }
@@ -48,7 +54,11 @@
 /* ---------- Header ---------- */
 
 .sos-header {
-  background: linear-gradient(135deg, var(--sos-lavender) 0%, var(--sos-blush) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--sos-lavender) 0%,
+    var(--sos-blush) 100%
+  );
   border-bottom: 1px solid var(--sos-border);
   position: sticky;
   top: 0;
@@ -103,7 +113,10 @@
   font-weight: 600;
   text-decoration: none;
   box-shadow: 0 2px 8px rgba(73, 54, 79, 0.1);
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .sos-back-link:hover {
@@ -194,7 +207,12 @@
   height: 190px;
   border-radius: 50%;
   border: 6px solid var(--sos-white);
-  background: radial-gradient(circle at 30% 25%, #dc9bb2 0%, var(--sos-rose) 60%, #b36783 100%);
+  background: radial-gradient(
+    circle at 30% 25%,
+    #dc9bb2 0%,
+    var(--sos-rose) 60%,
+    #b36783 100%
+  );
   color: var(--sos-white);
   cursor: pointer;
   display: inline-flex;
@@ -202,13 +220,19 @@
   align-items: center;
   justify-content: center;
   font-family: inherit;
-  box-shadow: 0 0 0 12px rgba(199, 125, 152, 0.18), 0 14px 34px rgba(199, 125, 152, 0.45);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow:
+    0 0 0 12px rgba(199, 125, 152, 0.18),
+    0 14px 34px rgba(199, 125, 152, 0.45);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .sos-button:hover:not(:disabled) {
   transform: scale(1.04);
-  box-shadow: 0 0 0 16px rgba(199, 125, 152, 0.22), 0 16px 38px rgba(199, 125, 152, 0.5);
+  box-shadow:
+    0 0 0 16px rgba(199, 125, 152, 0.22),
+    0 16px 38px rgba(199, 125, 152, 0.5);
 }
 
 .sos-button:active:not(:disabled) {
@@ -465,7 +489,11 @@
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .sos-btn:disabled {

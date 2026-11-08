@@ -24,7 +24,13 @@
   min-height: 100vh;
   background: var(--safety-bg);
   color: var(--safety-text);
-  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
   line-height: 1.6;
   box-sizing: border-box;
 }
@@ -38,7 +44,11 @@
 /* ---------- Header ---------- */
 
 .safety-header {
-  background: linear-gradient(135deg, var(--safety-lavender) 0%, var(--safety-blush) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--safety-lavender) 0%,
+    var(--safety-blush) 100%
+  );
   border-bottom: 1px solid var(--safety-border);
   position: sticky;
   top: 0;
@@ -93,7 +103,10 @@
   font-weight: 600;
   text-decoration: none;
   box-shadow: 0 2px 8px rgba(73, 54, 79, 0.1);
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .safety-back-link:hover {
@@ -200,7 +213,9 @@
   font-size: 1rem;
   text-decoration: none;
   box-shadow: 0 4px 12px rgba(199, 125, 152, 0.4);
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .safety-emergency-button:hover {
@@ -222,7 +237,9 @@
   border-radius: 18px;
   box-shadow: var(--safety-shadow);
   overflow: hidden;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .safety-card:hover,
@@ -250,7 +267,11 @@
 }
 
 .safety-card-open .safety-card-toggle {
-  background: linear-gradient(90deg, rgba(184, 165, 214, 0.18), rgba(245, 220, 229, 0.35));
+  background: linear-gradient(
+    90deg,
+    rgba(184, 165, 214, 0.18),
+    rgba(245, 220, 229, 0.35)
+  );
 }
 
 .safety-card-icon {

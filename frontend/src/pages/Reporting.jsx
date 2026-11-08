@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Reporting.css";
+import IncidentRecords from "../components/IncidentRecords";
 
 /* ------------------------------------------------------------------
    Verified resources used on this page (checked November 2026):
@@ -24,9 +25,7 @@ const ICON_PATHS = {
       <path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20" />
     </>
   ),
-  chat: (
-    <path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12z" />
-  ),
+  chat: <path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12z" />,
   eye: (
     <>
       <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
@@ -400,6 +399,7 @@ function Reporting() {
           </p>
         </section>
 
+        <IncidentRecords />
         {/* Emergency card */}
         <section
           className="reporting-emergency"
@@ -409,7 +409,9 @@ function Reporting() {
             <Icon name="alert" size={30} />
           </div>
           <div className="reporting-emergency-body">
-            <h2 id="reporting-emergency-title">In immediate danger? Call 112</h2>
+            <h2 id="reporting-emergency-title">
+              In immediate danger? Call 112
+            </h2>
             <p>
               If you are in immediate danger in India, call 112 right away. Do
               not wait for website assistance or finish reading this page.
@@ -540,10 +542,7 @@ function Reporting() {
                   <Icon name={resource.icon} />
                 </span>
                 <h3>{resource.name}</h3>
-                <a
-                  href={`tel:${resource.number}`}
-                  className="reporting-number"
-                >
+                <a href={`tel:${resource.number}`} className="reporting-number">
                   {resource.number}
                 </a>
                 <p>{resource.description}</p>

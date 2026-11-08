@@ -1,0 +1,19 @@
+services:
+  backend:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    env_file: backend/.env
+    environment: { APP_ENV: production }
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    mem_limit: 512m
+    logging: { driver: json-file, options: { max-size: 10m, max-file: "3" } }
+  frontend:
+    build: { context: ., dockerfile: frontend/Dockerfile }
+    ports: ["8080:8080"]
+    depends_on: [backend]
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    mem_limit: 128m
+    logging: { driver: json-file, options: { max-size: 10m, max-file: "3" } }

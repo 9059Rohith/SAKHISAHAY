@@ -46,7 +46,8 @@ body {
   --blush-pale: #fbeef2;
 
   --font-heading: "Fraunces", Georgia, "Times New Roman", serif;
-  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-body:
+    "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
   --radius-sm: 14px;
   --radius-md: 22px;
@@ -161,8 +162,12 @@ body {
   line-height: 1.2;
   white-space: nowrap;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease,
-    color 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .btn:hover {
@@ -207,7 +212,9 @@ body {
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .navbar--scrolled {
@@ -376,9 +383,15 @@ body {
 .hero__content > * {
   animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
-.hero__content > *:nth-child(2) { animation-delay: 0.1s; }
-.hero__content > *:nth-child(3) { animation-delay: 0.2s; }
-.hero__content > *:nth-child(4) { animation-delay: 0.3s; }
+.hero__content > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.hero__content > *:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.hero__content > *:nth-child(4) {
+  animation-delay: 0.3s;
+}
 
 .hero__visual {
   position: relative;
@@ -538,7 +551,9 @@ body {
   background-color: #ffffff;
   border: 1px solid rgba(184, 165, 214, 0.3);
   box-shadow: var(--shadow-soft);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .feature-card:hover {
@@ -682,7 +697,9 @@ body {
   letter-spacing: 0.06em;
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .sos-button:hover {
@@ -944,7 +961,10 @@ body {
     opacity: 0;
     visibility: hidden;
     transform: translateY(-8px);
-    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      visibility 0.2s;
   }
 
   .nav.is-open {

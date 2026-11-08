@@ -31,10 +31,12 @@
   --color-info: #6a5d9c;
 
   /* Typography */
-  --font-body: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue",
+  --font-body:
+    "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial,
+    sans-serif;
+  --font-heading:
+    "Poppins", "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue",
     Arial, sans-serif;
-  --font-heading: "Poppins", "Inter", "Segoe UI", system-ui, -apple-system,
-    "Helvetica Neue", Arial, sans-serif;
 
   --fs-xs: 0.8125rem;
   --fs-sm: 0.9375rem;
@@ -348,8 +350,10 @@ button.btn {
   border: 2px solid transparent;
   border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: background-color var(--transition-base),
-    color var(--transition-base), border-color var(--transition-base),
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base),
     box-shadow var(--transition-base);
 }
 
@@ -471,7 +475,8 @@ select,
   background-color: var(--color-surface);
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-md);
-  transition: border-color var(--transition-base),
+  transition:
+    border-color var(--transition-base),
     box-shadow var(--transition-base);
 }
 
@@ -668,14 +673,30 @@ main {
 }
 
 /* Spacing helpers */
-.mt-0 { margin-top: 0; }
-.mt-2 { margin-top: var(--space-2); }
-.mt-4 { margin-top: var(--space-4); }
-.mt-6 { margin-top: var(--space-6); }
-.mb-0 { margin-bottom: 0; }
-.mb-2 { margin-bottom: var(--space-2); }
-.mb-4 { margin-bottom: var(--space-4); }
-.mb-6 { margin-bottom: var(--space-6); }
+.mt-0 {
+  margin-top: 0;
+}
+.mt-2 {
+  margin-top: var(--space-2);
+}
+.mt-4 {
+  margin-top: var(--space-4);
+}
+.mt-6 {
+  margin-top: var(--space-6);
+}
+.mb-0 {
+  margin-bottom: 0;
+}
+.mb-2 {
+  margin-bottom: var(--space-2);
+}
+.mb-4 {
+  margin-bottom: var(--space-4);
+}
+.mb-6 {
+  margin-bottom: var(--space-6);
+}
 
 /* --------------------------------------------------------------------------
    8. Cards, Badges, Alerts
@@ -686,7 +707,8 @@ main {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-base),
+  transition:
+    box-shadow var(--transition-base),
     border-color var(--transition-base);
 }
 

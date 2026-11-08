@@ -87,7 +87,10 @@
   font-size: 0.95rem;
   font-weight: 600;
   text-decoration: none;
-  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .ec-back-link:hover {
@@ -194,7 +197,10 @@
   background: var(--ec-bg);
   color: var(--ec-heading);
   font: inherit;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .ec-input::placeholder {
@@ -255,8 +261,12 @@
   font-size: 0.93rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease,
-    box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .ec-btn:hover {
@@ -424,7 +434,10 @@
   border-radius: var(--ec-radius-lg);
   background: #fff;
   box-shadow: var(--ec-shadow);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .ec-contact:hover {
@@ -434,7 +447,9 @@
 
 .ec-contact-editing {
   border-color: var(--ec-rose);
-  box-shadow: 0 0 0 3px rgba(199, 125, 152, 0.25), var(--ec-shadow);
+  box-shadow:
+    0 0 0 3px rgba(199, 125, 152, 0.25),
+    var(--ec-shadow);
 }
 
 .ec-contact-main {

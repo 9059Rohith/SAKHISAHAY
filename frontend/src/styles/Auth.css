@@ -29,7 +29,12 @@
     #e9e1f4 100%
   );
   color: var(--auth-plum);
-  font-family: "Poppins", "Inter", "Segoe UI", system-ui, -apple-system,
+  font-family:
+    "Poppins",
+    "Inter",
+    "Segoe UI",
+    system-ui,
+    -apple-system,
     sans-serif;
   line-height: 1.5;
 }
@@ -48,7 +53,8 @@
   border: 1px solid rgba(184, 165, 214, 0.35);
   border-radius: 24px;
   padding: 32px 32px 28px;
-  box-shadow: 0 12px 40px rgba(73, 54, 79, 0.12),
+  box-shadow:
+    0 12px 40px rgba(73, 54, 79, 0.12),
     0 2px 8px rgba(73, 54, 79, 0.06);
 }
 
@@ -150,7 +156,9 @@
   border: 1.5px solid var(--auth-lavender);
   border-radius: 14px;
   box-shadow: 0 1px 3px rgba(73, 54, 79, 0.06);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .auth-field input::placeholder {
@@ -275,7 +283,9 @@
   border-radius: 999px;
   box-shadow: 0 6px 16px rgba(73, 54, 79, 0.28);
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.15s ease,
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease,
     box-shadow 0.2s ease;
 }
 

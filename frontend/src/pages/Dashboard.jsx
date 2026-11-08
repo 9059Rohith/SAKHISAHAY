@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../lib/auth";
+import { api, errorText } from "../lib/api";
 import "../styles/Dashboard.css";
 
 /* ==========================================================================
@@ -7,7 +9,6 @@ import "../styles/Dashboard.css";
    ========================================================================== */
 
 // Temporary placeholder until authentication is connected.
-const USER_NAME = "User";
 
 const NAV_LINKS = [
   { label: "Dashboard", to: "/dashboard" },
@@ -22,7 +23,8 @@ const QUICK_ACCESS = [
   {
     icon: "users",
     title: "Emergency Contact Management",
-    description: "Add and organise the people who should be told when you need help.",
+    description:
+      "Add and organise the people who should be told when you need help.",
     to: "/emergency-contacts",
     cta: "Open contacts",
   },
@@ -43,14 +45,16 @@ const QUICK_ACCESS = [
   {
     icon: "report",
     title: "Harassment Reporting Assistance",
-    description: "Understand your options and record an incident at your own pace.",
+    description:
+      "Understand your options and record an incident at your own pace.",
     to: "/reporting",
     cta: "Open reporting",
   },
   {
     icon: "info",
     title: "Safety Information and Guidance",
-    description: "Read practical tips for staying safe at home, at work and on the move.",
+    description:
+      "Read practical tips for staying safe at home, at work and on the move.",
     to: "/safety-information",
     cta: "Read guidance",
   },
@@ -168,6 +172,10 @@ function Icon({ name, size = 24 }) {
    ========================================================================== */
 
 function DashboardNav() {
+  const { user, logout } = useAuth();
+  const USER_NAME = user.full_name;
+  const navigate = useNavigate();
+  const [logoutError, setLogoutError] = useState("");
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -184,7 +192,12 @@ function DashboardNav() {
   return (
     <header className="db-header">
       <div className="db-container db-header__inner">
-        <Link to="/" className="db-brand" aria-label="SAKHISAHAY home" onClick={closeMenu}>
+        <Link
+          to="/"
+          className="db-brand"
+          aria-label="SAKHISAHAY home"
+          onClick={closeMenu}
+        >
           <span className="db-brand__mark">
             <Icon name="shield" size={22} />
           </span>
@@ -218,10 +231,26 @@ function DashboardNav() {
               </span>
               <span className="db-profile__name">{USER_NAME}</span>
             </div>
-            <Link to="/login" className="db-btn db-btn--outline" onClick={closeMenu}>
+            <Link to="/profile" className="db-btn db-btn--outline">
+              Account
+            </Link>
+            <Link
+              to="/login"
+              className="db-btn db-btn--outline"
+              onClick={async (e) => {
+                e.preventDefault();
+                try {
+                  await logout();
+                  navigate("/");
+                } catch (error) {
+                  setLogoutError(errorText(error));
+                }
+              }}
+            >
               <Icon name="logout" size={18} />
               Logout
             </Link>
+            {logoutError && <p role="alert">{logoutError}</p>}
           </div>
         </nav>
 
@@ -245,14 +274,16 @@ function DashboardNav() {
    ========================================================================== */
 
 function WelcomeSection() {
+  const { user } = useAuth();
+  const USER_NAME = user.full_name;
   return (
     <section className="db-card db-welcome" aria-labelledby="welcome-title">
       <div className="db-welcome__text">
         <h1 id="welcome-title">Welcome back!</h1>
         <p className="db-welcome__name">Hello, {USER_NAME}.</p>
         <p>
-          Staying prepared is a caring thing to do for yourself. Take a moment to
-          review your safety tools whenever you need to. You are not alone.
+          Staying prepared is a caring thing to do for yourself. Take a moment
+          to review your safety tools whenever you need to. You are not alone.
         </p>
       </div>
       <span className="db-welcome__badge" aria-hidden="true">
@@ -267,12 +298,16 @@ function SosSection() {
     <section className="db-card db-sos" aria-labelledby="sos-title">
       <h2 id="sos-title">Emergency SOS</h2>
       <p>
-        If you ever feel unsafe, open the SOS page. It is the fastest way to reach
-        the emergency tools in SAKHISAHAY.
+        If you ever feel unsafe, open the SOS page. It is the fastest way to
+        reach the emergency tools in SAKHISAHAY.
       </p>
 
       <div className="db-sos__ring">
-        <Link to="/sos" className="db-sos__button" aria-label="Open the SOS emergency page">
+        <Link
+          to="/sos"
+          className="db-sos__button"
+          aria-label="Open the SOS emergency page"
+        >
           SOS
         </Link>
       </div>
@@ -280,8 +315,9 @@ function SosSection() {
       <p className="db-notice" role="note">
         <Icon name="info" size={20} />
         <span>
-          <strong>Preview version:</strong> emergency calls and messages are not
-          active yet. In an emergency in India, dial <strong>112</strong>.
+          SOS saves your alert and opens call, SMS and share actions. Confirm
+          sending on your device. In an emergency in India, dial{" "}
+          <strong>112</strong>.
         </span>
       </p>
     </section>
@@ -321,24 +357,58 @@ function QuickAccessSection() {
 }
 
 function ContactOverview() {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    let active = true;
+    api
+      .get("/contacts?page_size=3")
+      .then((r) => {
+        if (active) setData(r);
+      })
+      .catch((e) => {
+        if (active) setError(errorText(e));
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
   return (
-    <section className="db-card db-contacts" aria-labelledby="contacts-title">
-      <h2 id="contacts-title">Emergency contacts</h2>
-      <p className="db-contacts__intro">
-        Contacts you save will appear here.
-      </p>
-
-      <div className="db-empty">
-        <span className="db-icon-badge">
-          <Icon name="users" size={26} />
-        </span>
-        <h3>No emergency contacts added yet</h3>
-        <p>Add people you trust, such as family or close friends, to get started.</p>
-        <Link to="/emergency-contacts" className="db-btn db-btn--primary">
-          <Icon name="plus" size={18} />
-          Add Contact
-        </Link>
-      </div>
+    <section className="db-card db-contacts">
+      <h2>Emergency contacts</h2>
+      {error ? (
+        <p role="alert">{error}</p>
+      ) : data ? (
+        <>
+          {data.total ? (
+            <>
+              <p>{data.total} people in your safety circle</p>
+              <ul className="dashboard-contacts">
+                {data.items.map((c) => (
+                  <li key={c.id}>
+                    <strong>{c.name}</strong>
+                    <span>{c.relationship}</span>
+                    <a href={`tel:+91${c.phone}`}>+91 {c.phone}</a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <div className="db-empty">
+              <h3>No emergency contacts added yet</h3>
+              <p>
+                Add people you trust, such as family or close friends, to get
+                started.
+              </p>
+            </div>
+          )}
+          <Link className="db-btn db-btn--primary" to="/emergency-contacts">
+            {data.total ? "Manage contacts" : "Add Contact"}
+          </Link>
+        </>
+      ) : (
+        <p role="status">Loading contacts…</p>
+      )}
     </section>
   );
 }

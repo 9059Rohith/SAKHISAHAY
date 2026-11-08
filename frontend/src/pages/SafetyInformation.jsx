@@ -138,7 +138,8 @@ const safetySections = [
   {
     id: "cyber",
     title: "Online and Cyber Safety",
-    summary: "Protect your accounts, your privacy and your peace of mind online.",
+    summary:
+      "Protect your accounts, your privacy and your peace of mind online.",
     Icon: LockIcon,
     tips: [
       {
@@ -238,7 +239,15 @@ const PORTAL_URL = "https://cybercrime.gov.in";
 
 /* ---------- Components ---------- */
 
-function SafetyAccordionItem({ id, title, summary, Icon, isOpen, onToggle, children }) {
+function SafetyAccordionItem({
+  id,
+  title,
+  summary,
+  Icon,
+  isOpen,
+  onToggle,
+  children,
+}) {
   const panelId = `safety-panel-${id}`;
   const buttonId = `safety-button-${id}`;
 
@@ -311,7 +320,10 @@ function SafetyInformation() {
           </p>
         </div>
 
-        <aside className="safety-emergency" aria-labelledby="safety-emergency-title">
+        <aside
+          className="safety-emergency"
+          aria-labelledby="safety-emergency-title"
+        >
           <div className="safety-emergency-icon">
             <PhoneIcon />
           </div>
@@ -322,8 +334,8 @@ function SafetyInformation() {
             <p>
               If you or someone else is in immediate danger, call{" "}
               <strong>112</strong>, India's Emergency Response Support System.
-              This link opens your phone's dialer; SAKHISAHAY does not place
-              the call or contact emergency services for you.
+              This link opens your phone's dialer; SAKHISAHAY does not place the
+              call or contact emergency services for you.
             </p>
           </div>
           <a href="tel:112" className="safety-emergency-button">
@@ -406,9 +418,9 @@ function SafetyInformation() {
 
         <p className="safety-disclaimer">
           <strong>Disclaimer:</strong> This page provides general safety
-          information only. It is not a substitute for emergency services or
-          for professional or legal advice. In an emergency, contact the
-          appropriate authorities immediately.
+          information only. It is not a substitute for emergency services or for
+          professional or legal advice. In an emergency, contact the appropriate
+          authorities immediately.
         </p>
       </main>
     </div>

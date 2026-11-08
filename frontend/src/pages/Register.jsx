@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../lib/auth";
+import { errorText } from "../lib/api";
 import "../styles/Auth.css";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -27,8 +29,12 @@ function validate({ fullName, email, password, confirmPassword }) {
 
   if (!password) {
     errors.password = "Please create a password.";
-  } else if (password.length < MIN_PASSWORD_LENGTH) {
-    errors.password = `Password must be at least ${MIN_PASSWORD_LENGTH} characters long.`;
+  } else if (
+    password.length < MIN_PASSWORD_LENGTH ||
+    !/[a-zA-Z]/.test(password) ||
+    !/\d/.test(password)
+  ) {
+    errors.password = `Use at least ${MIN_PASSWORD_LENGTH} characters including a letter and a number.`;
   }
 
   if (!confirmPassword) {
@@ -46,6 +52,10 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showNotice, setShowNotice] = useState(false);
+  const [serverError, setServerError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const auth = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -62,7 +72,7 @@ function Register() {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const validationErrors = validate(formData);
@@ -76,12 +86,22 @@ function Register() {
       return;
     }
 
-    // No backend call and no account creation yet.
-    // Clear password values from component state and show an informational notice.
-    setFormData((prev) => ({ ...prev, password: "", confirmPassword: "" }));
-    setShowPassword(false);
-    setShowConfirmPassword(false);
-    setShowNotice(true);
+    if (busy) return;
+    setBusy(true);
+    setServerError("");
+    try {
+      await auth.register({
+        full_name: formData.fullName.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+      });
+      navigate("/recovery-code");
+    } catch (error) {
+      setServerError(errorText(error));
+      setShowNotice(true);
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -120,10 +140,8 @@ function Register() {
         </header>
 
         {showNotice && (
-          <div className="auth-notice" role="status">
-            <strong>Registration is not available yet.</strong> Your details look
-            valid, but account creation will be available after backend
-            integration. Nothing has been sent or saved.
+          <div className="auth-notice" role="alert">
+            {serverError}
           </div>
         )}
 
@@ -145,7 +163,11 @@ function Register() {
               className={errors.fullName ? "has-error" : ""}
             />
             {errors.fullName && (
-              <p id="register-fullName-error" className="auth-error" role="alert">
+              <p
+                id="register-fullName-error"
+                className="auth-error"
+                role="alert"
+              >
                 {errors.fullName}
               </p>
             )}
@@ -162,7 +184,9 @@ function Register() {
               value={formData.email}
               onChange={handleChange}
               aria-invalid={errors.email ? "true" : "false"}
-              aria-describedby={errors.email ? "register-email-error" : undefined}
+              aria-describedby={
+                errors.email ? "register-email-error" : undefined
+              }
               className={errors.email ? "has-error" : ""}
             />
             {errors.email && (
@@ -205,7 +229,11 @@ function Register() {
               Use at least {MIN_PASSWORD_LENGTH} characters.
             </p>
             {errors.password && (
-              <p id="register-password-error" className="auth-error" role="alert">
+              <p
+                id="register-password-error"
+                className="auth-error"
+                role="alert"
+              >
                 {errors.password}
               </p>
             )}
@@ -255,7 +283,12 @@ function Register() {
             )}
           </div>
 
-          <button type="submit" className="auth-submit">
+          <button
+            type="submit"
+            disabled={busy}
+            aria-busy={busy}
+            className="auth-submit"
+          >
             Register
           </button>
         </form>
