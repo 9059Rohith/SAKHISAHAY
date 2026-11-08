@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import PageShell, { Feedback } from "../components/PageShell";
 import { Icon } from "../components/Icons";
 import { api, errorText } from "../lib/api";
+import LocationMap from "../components/LocationMap";
 
 const coordsOf = (p) => ({
   latitude: p.coords.latitude,
@@ -251,6 +252,11 @@ export default function Location() {
           <h2>{share ? "Your private share link" : "Your coordinates"}</h2>
           {coords ? (
             <>
+              <LocationMap
+                latitude={coords.latitude}
+                longitude={coords.longitude}
+                accuracy={coords.accuracy}
+              />
               <a
                 className="share-map"
                 href={`https://www.openstreetmap.org/?mlat=${coords.latitude}&mlon=${coords.longitude}#map=17/${coords.latitude}/${coords.longitude}`}

@@ -8,7 +8,7 @@
 
 SakhiSahay brings trusted contacts, private location sharing, practical AI guidance, private incident records and emergency contact actions into one personal space. It completes the original React frontend with a real FastAPI backend, MongoDB Atlas persistence, secure account sessions and server-side OpenAI integration.
 
-The interface follows the supplied cherry-blossom illustration reference: navy skies, rose and violet accents, translucent glass panels, fourteen illustrated backgrounds and six homepage sections. Strong layered parallax, floating title letters, repeatable word reveals, scroll-linked paragraph highlighting and moving typography make the visual experience active throughout the page.
+The homepage follows the supplied cherry-blossom illustration reference: navy skies, rose and violet accents, translucent glass panels, fourteen optimized illustrations and six homepage sections. Strong layered parallax, floating title letters, repeatable word reveals, scroll-linked paragraph highlighting and moving typography animate the homepage. Inside the application, a modern light workspace pairs the same lotus branding and serif headings with white cards, deep plum text, a lavender canvas and clear navigation.
 
 > Emergency services are not automatically dispatched. Call and SMS controls open the device's native apps and require the user to confirm sending. Private incident records are personal records, not official police complaints. In immediate danger in India, call 112.
 
@@ -39,7 +39,7 @@ The interface follows the supplied cherry-blossom illustration reference: navy s
 | Sessions | Short-lived access cookies, rotating refresh cookies, durable family revocation and cross-tab refresh coordination |
 | Trusted contacts | Save, search, edit and remove contacts; records remain after refresh and sign-in |
 | AI companion | Real OpenAI responses, English/Kannada selection, suggested questions, saved conversation history and history deletion |
-| Live location | Explicit browser consent, private one-hour links, position updates, public viewer and immediate link revocation |
+| Live location | Explicit browser consent, interactive OpenStreetMap, private one-hour links, position updates, public viewer and immediate link revocation |
 | Incident records | Private records with category/date/location/description, search, status filtering, edit, delete and JSON export |
 | Emergency SOS | Idempotent saved alerts, contact call/SMS buttons, shareable alert messages, location snapshots and resolution history |
 | Resources | Public safety guidance and official external support resources |
@@ -59,7 +59,7 @@ The homepage has six sections, each with a distinct illustrated background:
 5. **Feel prepared:** illustrated resource cards leading to guidance, incident records and SOS.
 6. **Safer tomorrows:** the closing invitation, account access and resource footer.
 
-Additional distinct backgrounds cover account screens, dashboard, contacts, location, chat, incident records and SOS. Artwork is encoded as WebP; below-fold illustrations load lazily.
+The image inventory includes distinct account, dashboard, contacts, location, chat, incident and SOS illustrations. The redesigned account screens and dashboard use selected illustrations; working forms use clear light surfaces to keep text readable. Artwork is encoded as WebP; below-fold homepage illustrations load lazily.
 
 Motion includes:
 
@@ -71,7 +71,27 @@ Motion includes:
 - Faster scrolling text bands and gently moving resource artwork.
 - Sticky translucent navigation and a scroll-progress indicator.
 
-Wide desktop screens use a compact **80% layout scale**, approximating two Ctrl-minus presses. Mobile remains at its normal readable scale. Actual browser zoom is controlled by the browser and can still be adjusted independently. The app respects `prefers-reduced-motion`: movement stops and all text remains visible.
+The homepage uses a compact **80% layout scale** on wide desktop screens, approximating two Ctrl-minus presses. Inner application forms and mobile pages use normal scale for readability. Actual browser zoom is controlled by the browser and can still be adjusted independently. The app respects `prefers-reduced-motion`: movement stops and all text remains visible.
+
+### Modern application workspace
+
+The approved homepage is preserved. The inner application has a shared sidebar, active page navigation, a persistent SOS shortcut, real account information and responsive cards. The dashboard shows actual contact data with loading, error and empty states. Login and registration pair a scenic illustration with readable forms. Contacts, chat, records, resources, profile and administration share the same palette and typography. On phones, the menu traps keyboard focus while open, closes on Escape, and returns focus to its trigger; its hidden links are inert.
+
+![Modern dashboard](docs/screenshots/dashboard.webp)
+
+![Trusted-contact workspace](docs/screenshots/contacts.webp)
+
+### Interactive OpenStreetMap
+
+Location detection and active shared-location links render a real Leaflet 1.9.4 map with OpenStreetMap tiles, position marker, accuracy circle, drag/zoom controls, visible attribution and a Recenter action. Detecting a position alone does not publish it. Shared viewers receive only the position authorized by the private expiring link. Revocation and expiration also stop access to the position API.
+
+Map tiles are an external service. If they cannot load, the application keeps coordinates and an external map link available. The tile request sends only the site origin as its referrer, excluding the private share-token path. Standard tiles are best-effort infrastructure, with no offline downloads or prefetching; follow the [OpenStreetMap tile usage policy](https://operations.osmfoundation.org/policies/tiles/) and configure a suitable provider for higher traffic. `VITE_OSM_TILE_URL` can override the tile template; allow any alternative provider in the deployed image Content Security Policy too.
+
+![Interactive location map](docs/screenshots/location.webp)
+
+### Connecting SMTP
+
+Email verification and recovery use the existing server-side SMTP adapter. Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` and `EMAIL_FROM` in the hosting environment, then redeploy. Port 465 uses TLS; other ports use STARTTLS. Configure the sender domain with the mail provider and test delivery through profile verification and password recovery. Credentials belong only in server environment settings. No SMTP provider credentials were supplied, so the live deployment does not claim to send mail; saved recovery codes work independently.
 
 ![Parallax section and animated typography](docs/screenshots/parallax-section.webp)
 
@@ -112,6 +132,7 @@ Unknown routes render a dedicated page-not-found screen. Protected routes redire
 | UI | React 19, JSX, React Router 7 |
 | Frontend build | Vite 8, npm lockfile, self-hosted Inter and Cormorant Garamond |
 | Animation | CSS keyframes, IntersectionObserver, requestAnimationFrame and passive scroll listeners |
+| Maps | Dynamically loaded Leaflet 1.9.4, OpenStreetMap tiles and origin-only tile referrers |
 | API | FastAPI on Python 3.12; explicit Pydantic request/response models |
 | Database | MongoDB Atlas with Motor; unique, compound and TTL indexes |
 | Authentication | Argon2, signed access tokens and hashed rotating refresh tokens |

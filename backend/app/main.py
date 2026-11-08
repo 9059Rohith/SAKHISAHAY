@@ -209,7 +209,7 @@ def create_app(settings=None, database=None):
                 "Referrer-Policy": "no-referrer",
                 "Permissions-Policy": "geolocation=(self), camera=(), microphone=()",
                 "Cache-Control": "no-store",
-                "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+                "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://tile.openstreetmap.org; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
             }
         )
         if production:

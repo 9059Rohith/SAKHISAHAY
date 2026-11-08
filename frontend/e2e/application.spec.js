@@ -29,6 +29,33 @@ test("reference UI, walkthrough, mobile layout and reduced motion", async ({ pag
   expect(errors).toEqual([]);
 });
 
+test("mobile drawer keyboard focus and long contact names stay usable", async ({ page, context, baseURL }) => {
+  await context.addCookies([{ name: "csrf_token", value: "ui-only-test", url: baseURL }]);
+  await page.route("**/api/v1/auth/me", (route) => route.fulfill({ json: { id: "ui-test", full_name: "Sakhi UI Test", email: "ui@example.com", role: "user" } }));
+  await page.route("**/api/v1/contacts?*", (route) => route.fulfill({ json: { items: [{ id: "contact-test", name: "A".repeat(100), phone: "9876543210", relationship: "Friend" }], total: 1, page: 1, page_size: 3 } }));
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/dashboard");
+  await expect(page.getByText("Hello, Sakhi UI Test.")).toBeVisible();
+  await expect(page.locator(".portal-sidebar")).toHaveAttribute("inert", "");
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("button", { name: "Open application menu" })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("button", { name: "Close application menu" })).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Shift+Tab");
+  expect(await page.evaluate(() => document.activeElement.closest(".portal-sidebar") !== null)).toBe(true);
+  await page.keyboard.press("Tab");
+  expect(await page.evaluate(() => document.activeElement.closest(".portal-sidebar") !== null)).toBe(true);
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("button", { name: "Open application menu" })).toBeFocused();
+  const telephone = page.locator('.modern-contact-list a[href="tel:+919876543210"]');
+  await telephone.scrollIntoViewIfNeeded();
+  const box = await telephone.boundingBox();
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(390);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
 test("real account, persisted contacts, incidents, AI, live share, SOS, logout and recovery", async ({ page, context }) => {
   const email = `sakhi-e2e-${Date.now()}@example.com`;
   const password = "SecurePass912!";
@@ -82,9 +109,15 @@ test("real account, persisted contacts, incidents, AI, live share, SOS, logout a
   await page.goto("/location");
   await page.getByRole("button", { name: "Start live sharing" }).click();
   await expect(page.getByRole("heading", { name: "Live sharing is active" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Interactive OpenStreetMap" })).toBeVisible();
+  await expect(page.locator(".leaflet-container")).toBeVisible();
+  await expect(page.locator(".leaflet-control-attribution")).toContainText("OpenStreetMap");
+  await page.getByRole("button", { name: "Zoom in", exact: true }).click();
+  await page.getByRole("button", { name: "Recenter map", exact: true }).click();
   const shareLink = await page.locator(".share-link").getAttribute("href");
   const viewer = await context.newPage(); await viewer.goto(shareLink);
   await expect(viewer.locator(".share-value")).toContainText("12.971600");
+  await expect(viewer.getByRole("region", { name: "Interactive OpenStreetMap" })).toBeVisible();
   await page.getByRole("button", { name: "Stop sharing" }).click();
   await viewer.reload(); await expect(viewer.getByRole("alert")).toContainText(/stopped|expired/); await viewer.close();
 
@@ -102,5 +135,11 @@ test("real account, persisted contacts, incidents, AI, live share, SOS, logout a
   await expect(page.getByRole("status")).toContainText("Password reset");
   await page.goto("/login"); await page.locator("#login-email").fill(email); await page.locator("#login-password").fill("NewSecurePass945!"); await page.locator('button[type="submit"]').click(); await expect(page).toHaveURL(/\/dashboard/);
   await page.goto("/emergency-contacts"); await page.getByRole("button", { name: "Delete Updated Test Contact" }).click(); await page.getByRole("button", { name: "Yes, delete" }).click(); await expect(page.getByRole("heading", { name: "No emergency contacts yet" })).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Open application menu" }).click();
+  await page.getByRole("navigation", { name: "Application navigation" }).getByRole("link", { name: "Dashboard", exact: true }).click();
+  await expect(page).toHaveURL(/\/dashboard/);
+  await expect(page.getByRole("button", { name: "Open application menu" })).toHaveAttribute("aria-expanded", "false");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(errors).toEqual([]);
 });

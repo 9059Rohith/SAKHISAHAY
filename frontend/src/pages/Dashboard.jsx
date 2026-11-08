@@ -1,370 +1,43 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../lib/auth";
 import { api, errorText } from "../lib/api";
-import "../styles/Dashboard.css";
+import { Icon, Lotus } from "../components/Icons";
 
-/* ==========================================================================
-   DATA
-   ========================================================================== */
-
-// Temporary placeholder until authentication is connected.
-
-const NAV_LINKS = [
-  { label: "Dashboard", to: "/dashboard" },
-  { label: "SOS", to: "/sos" },
-  { label: "Contacts", to: "/emergency-contacts" },
-  { label: "Location", to: "/location" },
-  { label: "Chatbot", to: "/chatbot" },
-  { label: "Reporting", to: "/reporting" },
-];
-
-const QUICK_ACCESS = [
+const tools = [
   {
     icon: "users",
-    title: "Emergency Contact Management",
-    description:
-      "Add and organise the people who should be told when you need help.",
+    title: "Your safety circle",
+    text: "Keep the people who care about you a little closer.",
     to: "/emergency-contacts",
-    cta: "Open contacts",
+    action: "Manage trusted contacts",
   },
   {
     icon: "pin",
-    title: "Live Location Sharing",
-    description: "Share where you are with trusted contacts while you travel.",
+    title: "Share your journey",
+    text: "Let someone you trust follow along, on your terms.",
     to: "/location",
-    cta: "Open location",
+    action: "Open live location",
   },
   {
-    icon: "chat",
-    title: "AI Safety Chatbot",
-    description: "Ask safety questions and get calm, practical guidance.",
+    icon: "sparkles",
+    title: "A little guidance",
+    text: "Find calm, practical safety guidance in English or Kannada.",
     to: "/chatbot",
-    cta: "Open chatbot",
-  },
-  {
-    icon: "report",
-    title: "Harassment Reporting Assistance",
-    description:
-      "Understand your options and record an incident at your own pace.",
-    to: "/reporting",
-    cta: "Open reporting",
-  },
-  {
-    icon: "info",
-    title: "Safety Information and Guidance",
-    description:
-      "Read practical tips for staying safe at home, at work and on the move.",
-    to: "/safety-information",
-    cta: "Read guidance",
+    action: "Talk to your AI companion",
   },
 ];
 
-/* ==========================================================================
-   ICONS
-   ========================================================================== */
-
-const ICON_PATHS = {
-  shield: (
-    <>
-      <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z" />
-      <path d="M9 12l2 2 4-4" />
-    </>
-  ),
-  users: (
-    <>
-      <path d="M17 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2" />
-      <circle cx="10" cy="7" r="4" />
-      <path d="M21 21v-2a4 4 0 00-3-3.9" />
-      <path d="M16 3.1a4 4 0 010 7.8" />
-    </>
-  ),
-  pin: (
-    <>
-      <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1116 0z" />
-      <circle cx="12" cy="10" r="3" />
-    </>
-  ),
-  chat: (
-    <>
-      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-      <path d="M8 9h8" />
-      <path d="M8 13h5" />
-    </>
-  ),
-  report: (
-    <>
-      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-      <path d="M14 2v6h6" />
-      <path d="M8 13h8" />
-      <path d="M8 17h6" />
-    </>
-  ),
-  info: (
-    <>
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 16v-4" />
-      <path d="M12 8h.01" />
-    </>
-  ),
-  arrow: (
-    <>
-      <path d="M5 12h14" />
-      <path d="M13 6l6 6-6 6" />
-    </>
-  ),
-  plus: (
-    <>
-      <path d="M12 5v14" />
-      <path d="M5 12h14" />
-    </>
-  ),
-  logout: (
-    <>
-      <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
-      <path d="M16 17l5-5-5-5" />
-      <path d="M21 12H9" />
-    </>
-  ),
-  lightbulb: (
-    <>
-      <path d="M9 18h6" />
-      <path d="M10 22h4" />
-      <path d="M12 2a7 7 0 00-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0012 2z" />
-    </>
-  ),
-  menu: (
-    <>
-      <path d="M4 7h16" />
-      <path d="M4 12h16" />
-      <path d="M4 17h16" />
-    </>
-  ),
-  close: (
-    <>
-      <path d="M6 6l12 12" />
-      <path d="M18 6L6 18" />
-    </>
-  ),
-};
-
-function Icon({ name, size = 24 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      focusable="false"
-    >
-      {ICON_PATHS[name]}
-    </svg>
-  );
-}
-
-/* ==========================================================================
-   TOP NAVIGATION
-   ========================================================================== */
-
-function DashboardNav() {
-  const { user, logout } = useAuth();
-  const USER_NAME = user.full_name;
-  const navigate = useNavigate();
-  const [logoutError, setLogoutError] = useState("");
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (!open) return undefined;
-    const onKeyDown = (event) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [open]);
-
-  const closeMenu = () => setOpen(false);
-
-  return (
-    <header className="db-header">
-      <div className="db-container db-header__inner">
-        <Link
-          to="/"
-          className="db-brand"
-          aria-label="SAKHISAHAY home"
-          onClick={closeMenu}
-        >
-          <span className="db-brand__mark">
-            <Icon name="shield" size={22} />
-          </span>
-          <span className="db-brand__name">SAKHISAHAY</span>
-        </Link>
-
-        <nav
-          id="dashboard-navigation"
-          className={`db-nav${open ? " is-open" : ""}`}
-          aria-label="Dashboard"
-        >
-          <ul className="db-nav__links">
-            {NAV_LINKS.map((link) => (
-              <li key={link.to}>
-                <Link
-                  to={link.to}
-                  className="db-nav__link"
-                  aria-current={link.to === "/dashboard" ? "page" : undefined}
-                  onClick={closeMenu}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          <div className="db-nav__account">
-            <div className="db-profile">
-              <span className="db-profile__avatar" aria-hidden="true">
-                {USER_NAME.charAt(0).toUpperCase()}
-              </span>
-              <span className="db-profile__name">{USER_NAME}</span>
-            </div>
-            <Link to="/profile" className="db-btn db-btn--outline">
-              Account
-            </Link>
-            <Link
-              to="/login"
-              className="db-btn db-btn--outline"
-              onClick={async (e) => {
-                e.preventDefault();
-                try {
-                  await logout();
-                  navigate("/");
-                } catch (error) {
-                  setLogoutError(errorText(error));
-                }
-              }}
-            >
-              <Icon name="logout" size={18} />
-              Logout
-            </Link>
-            {logoutError && <p role="alert">{logoutError}</p>}
-          </div>
-        </nav>
-
-        <button
-          type="button"
-          className="db-nav-toggle"
-          aria-expanded={open}
-          aria-controls="dashboard-navigation"
-          aria-label={open ? "Close menu" : "Open menu"}
-          onClick={() => setOpen((value) => !value)}
-        >
-          <Icon name={open ? "close" : "menu"} size={24} />
-        </button>
-      </div>
-    </header>
-  );
-}
-
-/* ==========================================================================
-   SECTIONS
-   ========================================================================== */
-
-function WelcomeSection() {
+export default function Dashboard() {
   const { user } = useAuth();
-  const USER_NAME = user.full_name;
-  return (
-    <section className="db-card db-welcome" aria-labelledby="welcome-title">
-      <div className="db-welcome__text">
-        <h1 id="welcome-title">Welcome back!</h1>
-        <p className="db-welcome__name">Hello, {USER_NAME}.</p>
-        <p>
-          Staying prepared is a caring thing to do for yourself. Take a moment
-          to review your safety tools whenever you need to. You are not alone.
-        </p>
-      </div>
-      <span className="db-welcome__badge" aria-hidden="true">
-        <Icon name="shield" size={56} />
-      </span>
-    </section>
-  );
-}
-
-function SosSection() {
-  return (
-    <section className="db-card db-sos" aria-labelledby="sos-title">
-      <h2 id="sos-title">Emergency SOS</h2>
-      <p>
-        If you ever feel unsafe, open the SOS page. It is the fastest way to
-        reach the emergency tools in SAKHISAHAY.
-      </p>
-
-      <div className="db-sos__ring">
-        <Link
-          to="/sos"
-          className="db-sos__button"
-          aria-label="Open the SOS emergency page"
-        >
-          SOS
-        </Link>
-      </div>
-
-      <p className="db-notice" role="note">
-        <Icon name="info" size={20} />
-        <span>
-          SOS saves your alert and opens call, SMS and share actions. Confirm
-          sending on your device. In an emergency in India, dial{" "}
-          <strong>112</strong>.
-        </span>
-      </p>
-    </section>
-  );
-}
-
-function QuickAccessCard({ icon, title, description, to, cta }) {
-  return (
-    <li className="db-card db-quick__card">
-      <span className="db-icon-badge">
-        <Icon name={icon} size={26} />
-      </span>
-      <h3>{title}</h3>
-      <p>{description}</p>
-      <Link to={to} className="db-btn db-btn--outline db-quick__link">
-        {cta}
-        <Icon name="arrow" size={16} />
-      </Link>
-    </li>
-  );
-}
-
-function QuickAccessSection() {
-  return (
-    <section className="db-section" aria-labelledby="quick-title">
-      <div className="db-section__head">
-        <h2 id="quick-title">Quick access</h2>
-        <p>Jump straight to the tools you use most.</p>
-      </div>
-      <ul className="db-quick">
-        {QUICK_ACCESS.map((item) => (
-          <QuickAccessCard key={item.to} {...item} />
-        ))}
-      </ul>
-    </section>
-  );
-}
-
-function ContactOverview() {
-  const [data, setData] = useState(null);
+  const [contacts, setContacts] = useState(null);
   const [error, setError] = useState("");
   useEffect(() => {
     let active = true;
     api
       .get("/contacts?page_size=3")
       .then((r) => {
-        if (active) setData(r);
+        if (active) setContacts(r);
       })
       .catch((e) => {
         if (active) setError(errorText(e));
@@ -374,83 +47,144 @@ function ContactOverview() {
     };
   }, []);
   return (
-    <section className="db-card db-contacts">
-      <h2>Emergency contacts</h2>
-      {error ? (
-        <p role="alert">{error}</p>
-      ) : data ? (
-        <>
-          {data.total ? (
-            <>
-              <p>{data.total} people in your safety circle</p>
-              <ul className="dashboard-contacts">
-                {data.items.map((c) => (
-                  <li key={c.id}>
-                    <strong>{c.name}</strong>
-                    <span>{c.relationship}</span>
-                    <a href={`tel:+91${c.phone}`}>+91 {c.phone}</a>
+    <main className="modern-dashboard">
+      <div className="dashboard-page-heading">
+        <span className="portal-kicker">A SPACE THAT'S YOURS</span>
+        <h1>Your safety space.</h1>
+        <p>Hello, {user.full_name}.</p>
+        <p className="dashboard-subtitle">
+          A little preparation. A little connection. A world of reassurance.
+        </p>
+      </div>
+      <div className="dashboard-intro-grid">
+        <section className="dashboard-welcome">
+          <div>
+            <span className="dashboard-status">
+              <Icon name="shield" size={15} /> You're in control
+            </span>
+            <h2>
+              You’re here, and that’s
+              <br />a meaningful step.
+            </h2>
+            <p>
+              Keep your trusted people close and your safety tools ready. Take
+              things at your own pace.
+            </p>
+            <Link to="/emergency-contacts" className="night-button">
+              Review trusted contacts <Icon name="arrow" size={17} />
+            </Link>
+          </div>
+          <Lotus size={130} />
+        </section>
+        <section className="dashboard-emergency">
+          <span className="dashboard-danger-icon">
+            <Icon name="siren" size={29} />
+          </span>
+          <h2>Need help right now?</h2>
+          <p>Quickly reach emergency tools and the people you trust.</p>
+          <Link to="/sos" className="night-button danger">
+            <Icon name="siren" size={18} /> Open emergency tools
+          </Link>
+          <small>Calls and messages require your action.</small>
+        </section>
+      </div>
+      <div className="dashboard-tools">
+        {tools.map((tool) => (
+          <Link to={tool.to} key={tool.to} className="dashboard-tool">
+            <span className="dashboard-tool-icon">
+              <Icon name={tool.icon} size={25} />
+            </span>
+            <h2>{tool.title}</h2>
+            <p>{tool.text}</p>
+            <span className="dashboard-tool-action">
+              {tool.action}
+              <Icon name="arrow" size={17} />
+            </span>
+          </Link>
+        ))}
+      </div>
+      <div className="dashboard-bottom-grid">
+        <section className="dashboard-contact-panel">
+          <div className="dashboard-panel-heading">
+            <h2>Trusted contacts</h2>
+            {contacts && (
+              <span>
+                {contacts.total} {contacts.total === 1 ? "person" : "people"}
+              </span>
+            )}
+            <Link to="/emergency-contacts">
+              View all <Icon name="arrow" size={15} />
+            </Link>
+          </div>
+          {error ? (
+            <p className="feedback" role="alert">
+              {error}
+            </p>
+          ) : contacts ? (
+            contacts.items.length ? (
+              <ul className="modern-contact-list">
+                {contacts.items.map((contact) => (
+                  <li key={contact.id}>
+                    <span className="contact-initial">
+                      {contact.name.charAt(0)}
+                    </span>
+                    <div>
+                      <strong>{contact.name}</strong>
+                      <small>{contact.relationship}</small>
+                    </div>
+                    <a href={`tel:+91${contact.phone}`}>+91 {contact.phone}</a>
                   </li>
                 ))}
               </ul>
-            </>
+            ) : (
+              <div className="dashboard-empty">
+                <Icon name="users" size={38} />
+                <h3>Your circle starts with one person.</h3>
+                <p>Add a friend, family member or someone you trust.</p>
+                <Link
+                  className="night-button secondary"
+                  to="/emergency-contacts"
+                >
+                  Add Contact <Icon name="arrow" size={16} />
+                </Link>
+              </div>
+            )
           ) : (
-            <div className="db-empty">
-              <h3>No emergency contacts added yet</h3>
-              <p>
-                Add people you trust, such as family or close friends, to get
-                started.
-              </p>
-            </div>
+            <p className="dashboard-loading" role="status">
+              Loading your safety circle…
+            </p>
           )}
-          <Link className="db-btn db-btn--primary" to="/emergency-contacts">
-            {data.total ? "Manage contacts" : "Add Contact"}
+        </section>
+        <aside className="dashboard-tip">
+          <span className="dashboard-tip-icon">
+            <Icon name="book" size={25} />
+          </span>
+          <h2>A moment to prepare</h2>
+          <p>
+            Before you head out, tell someone you trust where you’re going and
+            when you expect to arrive. Keep your phone charged and your
+            emergency numbers close.
+          </p>
+          <Link to="/safety-information">
+            Explore safety resources <Icon name="arrow" size={16} />
           </Link>
-        </>
-      ) : (
-        <p role="status">Loading contacts…</p>
-      )}
-    </section>
-  );
-}
-
-function SafetyReminder() {
-  return (
-    <aside className="db-card db-reminder" aria-labelledby="reminder-title">
-      <span className="db-icon-badge db-icon-badge--lavender">
-        <Icon name="lightbulb" size={26} />
-      </span>
-      <h2 id="reminder-title">Safety reminder</h2>
-      <p>
-        Before you head out, tell someone you trust where you are going and when
-        you expect to arrive. Keep your phone charged and stay on well-lit,
-        familiar routes whenever you can.
-      </p>
-    </aside>
-  );
-}
-
-/* ==========================================================================
-   PAGE
-   ========================================================================== */
-
-export default function Dashboard() {
-  return (
-    <div className="db-page">
-      <DashboardNav />
-
-      <main className="db-container db-main">
-        <div className="db-top">
-          <WelcomeSection />
-          <SosSection />
+        </aside>
+      </div>
+      <Link to="/reporting" className="dashboard-record-link">
+        <span className="dashboard-tool-icon">
+          <Icon name="shield" size={22} />
+        </span>
+        <div>
+          <h2>Your story, your space.</h2>
+          <p>
+            Keep a private incident record, in your own words and at your own
+            pace.
+          </p>
         </div>
-
-        <QuickAccessSection />
-
-        <div className="db-bottom">
-          <ContactOverview />
-          <SafetyReminder />
-        </div>
-      </main>
-    </div>
+        <span>
+          Open private records <Icon name="arrow" size={17} />
+        </span>
+      </Link>
+    </main>
   );
 }

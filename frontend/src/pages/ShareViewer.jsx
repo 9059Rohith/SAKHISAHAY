@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import PageShell, { Feedback } from "../components/PageShell";
 import { Icon } from "../components/Icons";
 import { api, errorText } from "../lib/api";
+import LocationMap from "../components/LocationMap";
 
 export default function ShareViewer() {
   const { token } = useParams();
@@ -42,6 +43,11 @@ export default function ShareViewer() {
         <Feedback error={error} />
         {share ? (
           <>
+            <LocationMap
+              latitude={share.latitude}
+              longitude={share.longitude}
+              accuracy={share.accuracy}
+            />
             <a
               className="share-map"
               target="_blank"

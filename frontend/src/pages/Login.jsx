@@ -120,9 +120,6 @@ function Login() {
           </div>
         )}
 
-        <p style={{ marginBottom: 15 }}>
-          <Link to="/forgot-password">Forgot password?</Link>
-        </p>
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="auth-field">
             <label htmlFor="login-email">Email address</label>
@@ -180,16 +177,8 @@ function Login() {
           </div>
 
           <div className="auth-forgot">
-            <button
-              type="button"
-              className="auth-disabled-link"
-              aria-disabled="true"
-              onClick={(event) => event.preventDefault()}
-              title="Password recovery is not available yet"
-            >
-              Forgot password?
-            </button>
-            <span className="auth-badge">Unavailable for now</span>
+            <Link to="/reset-password">Use a recovery code</Link>
+            <Link to="/forgot-password">Forgot password?</Link>
           </div>
 
           <button

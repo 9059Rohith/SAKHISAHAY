@@ -9,7 +9,7 @@ import {
 import { AuthProvider, Protected } from "./lib/auth";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Home from "./pages/Home";
-import { RouteAtmosphere } from "./components/Motion";
+import InteriorFrame from "./components/InteriorFrame";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -37,6 +37,7 @@ import "@fontsource/cormorant-garamond/latin-600.css";
 import "./styles/Night.css";
 import "./styles/Story.css";
 import "./styles/Expressive.css";
+import "./styles/Interior.css";
 
 function AppRoutes() {
   const { pathname } = useLocation();
@@ -46,101 +47,102 @@ function AppRoutes() {
   return (
     <ErrorBoundary>
       <AuthProvider>
-        <RouteAtmosphere />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<RecoveryPage />} />
-          <Route path="/reset-password" element={<RecoveryPage reset />} />
-          <Route path="/verify-email" element={<VerifyPage />} />
-          <Route path="/share/:token" element={<ShareViewer />} />
-          <Route path="/safety-information" element={<SafetyInformation />} />
-          <Route
-            path="/recovery-code"
-            element={
-              <Protected>
-                <RecoveryCode />
-              </Protected>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <Protected>
-                <Dashboard />
-              </Protected>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <Protected>
-                <AccountPage />
-              </Protected>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <Protected admin>
-                <AdminPage />
-              </Protected>
-            }
-          />
-          <Route
-            path="/emergency-contacts"
-            element={
-              <Protected>
-                <EmergencyContacts />
-              </Protected>
-            }
-          />
-          <Route
-            path="/location"
-            element={
-              <Protected>
-                <Location />
-              </Protected>
-            }
-          />
-          <Route
-            path="/chatbot"
-            element={
-              <Protected>
-                <Chatbot />
-              </Protected>
-            }
-          />
-          <Route
-            path="/reporting"
-            element={
-              <Protected>
-                <Reporting />
-              </Protected>
-            }
-          />
-          <Route
-            path="/sos"
-            element={
-              <Protected>
-                <SOS />
-              </Protected>
-            }
-          />
-          <Route
-            path="*"
-            element={
-              <main className="system-page">
-                <h1>Page not found</h1>
-                <p>Let’s get you back to your safety space.</p>
-                <Link className="night-button" to="/">
-                  Back to home
-                </Link>
-              </main>
-            }
-          />
-        </Routes>
+        <InteriorFrame>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<RecoveryPage />} />
+            <Route path="/reset-password" element={<RecoveryPage reset />} />
+            <Route path="/verify-email" element={<VerifyPage />} />
+            <Route path="/share/:token" element={<ShareViewer />} />
+            <Route path="/safety-information" element={<SafetyInformation />} />
+            <Route
+              path="/recovery-code"
+              element={
+                <Protected>
+                  <RecoveryCode />
+                </Protected>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <Protected>
+                  <Dashboard />
+                </Protected>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <Protected>
+                  <AccountPage />
+                </Protected>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <Protected admin>
+                  <AdminPage />
+                </Protected>
+              }
+            />
+            <Route
+              path="/emergency-contacts"
+              element={
+                <Protected>
+                  <EmergencyContacts />
+                </Protected>
+              }
+            />
+            <Route
+              path="/location"
+              element={
+                <Protected>
+                  <Location />
+                </Protected>
+              }
+            />
+            <Route
+              path="/chatbot"
+              element={
+                <Protected>
+                  <Chatbot />
+                </Protected>
+              }
+            />
+            <Route
+              path="/reporting"
+              element={
+                <Protected>
+                  <Reporting />
+                </Protected>
+              }
+            />
+            <Route
+              path="/sos"
+              element={
+                <Protected>
+                  <SOS />
+                </Protected>
+              }
+            />
+            <Route
+              path="*"
+              element={
+                <main className="system-page">
+                  <h1>Page not found</h1>
+                  <p>Let’s get you back to your safety space.</p>
+                  <Link className="night-button" to="/">
+                    Back to home
+                  </Link>
+                </main>
+              }
+            />
+          </Routes>
+        </InteriorFrame>
       </AuthProvider>
     </ErrorBoundary>
   );
