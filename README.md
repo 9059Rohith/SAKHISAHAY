@@ -2,7 +2,8 @@
 
 A personal safety companion built with React, FastAPI, MongoDB Atlas and server-side OpenAI.
 
-**Live:** https://sakhisahay-9059.vercel.app  
+**Live:** https://sakhisahay-9059.vercel.app
+
 **Source:** https://github.com/9059Rohith/SAKHISAHAY
 
 Six illustrated homepage sections, fourteen WebP images, independent parallax, word reveals, scrolling typography and responsive layouts. The original frontend framework is retained.

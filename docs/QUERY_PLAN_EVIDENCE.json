@@ -1,0 +1,154 @@
+{
+  "contacts": {
+    "index_scan": true,
+    "winning_plan": {
+      "isCached": false,
+      "stage": "FETCH",
+      "inputStage": {
+        "stage": "IXSCAN",
+        "keyPattern": {
+          "user_id": 1,
+          "created_at": -1,
+          "_id": -1
+        },
+        "indexName": "user_id_1_created_at_-1__id_-1",
+        "isMultiKey": false,
+        "multiKeyPaths": {
+          "user_id": [],
+          "created_at": [],
+          "_id": []
+        },
+        "isUnique": false,
+        "isSparse": false,
+        "isPartial": false,
+        "indexVersion": 2,
+        "direction": "forward",
+        "indexBounds": {
+          "user_id": [
+            "[\"query-plan-probe\", \"query-plan-probe\"]"
+          ],
+          "created_at": [
+            "[MaxKey, MinKey]"
+          ],
+          "_id": [
+            "[MaxKey, MinKey]"
+          ]
+        }
+      }
+    }
+  },
+  "reports": {
+    "index_scan": true,
+    "winning_plan": {
+      "isCached": false,
+      "stage": "FETCH",
+      "inputStage": {
+        "stage": "IXSCAN",
+        "keyPattern": {
+          "user_id": 1,
+          "created_at": -1,
+          "_id": -1
+        },
+        "indexName": "user_id_1_created_at_-1__id_-1",
+        "isMultiKey": false,
+        "multiKeyPaths": {
+          "user_id": [],
+          "created_at": [],
+          "_id": []
+        },
+        "isUnique": false,
+        "isSparse": false,
+        "isPartial": false,
+        "indexVersion": 2,
+        "direction": "forward",
+        "indexBounds": {
+          "user_id": [
+            "[\"query-plan-probe\", \"query-plan-probe\"]"
+          ],
+          "created_at": [
+            "[MaxKey, MinKey]"
+          ],
+          "_id": [
+            "[MaxKey, MinKey]"
+          ]
+        }
+      }
+    }
+  },
+  "chat_messages": {
+    "index_scan": true,
+    "winning_plan": {
+      "isCached": false,
+      "stage": "FETCH",
+      "inputStage": {
+        "stage": "IXSCAN",
+        "keyPattern": {
+          "user_id": 1,
+          "created_at": -1,
+          "_id": -1
+        },
+        "indexName": "user_id_1_created_at_-1__id_-1",
+        "isMultiKey": false,
+        "multiKeyPaths": {
+          "user_id": [],
+          "created_at": [],
+          "_id": []
+        },
+        "isUnique": false,
+        "isSparse": false,
+        "isPartial": false,
+        "indexVersion": 2,
+        "direction": "forward",
+        "indexBounds": {
+          "user_id": [
+            "[\"query-plan-probe\", \"query-plan-probe\"]"
+          ],
+          "created_at": [
+            "[MaxKey, MinKey]"
+          ],
+          "_id": [
+            "[MaxKey, MinKey]"
+          ]
+        }
+      }
+    }
+  },
+  "alerts": {
+    "index_scan": true,
+    "winning_plan": {
+      "isCached": false,
+      "stage": "FETCH",
+      "inputStage": {
+        "stage": "IXSCAN",
+        "keyPattern": {
+          "user_id": 1,
+          "created_at": -1,
+          "_id": -1
+        },
+        "indexName": "user_id_1_created_at_-1__id_-1",
+        "isMultiKey": false,
+        "multiKeyPaths": {
+          "user_id": [],
+          "created_at": [],
+          "_id": []
+        },
+        "isUnique": false,
+        "isSparse": false,
+        "isPartial": false,
+        "indexVersion": 2,
+        "direction": "forward",
+        "indexBounds": {
+          "user_id": [
+            "[\"query-plan-probe\", \"query-plan-probe\"]"
+          ],
+          "created_at": [
+            "[MaxKey, MinKey]"
+          ],
+          "_id": [
+            "[MaxKey, MinKey]"
+          ]
+        }
+      }
+    }
+  }
+}
