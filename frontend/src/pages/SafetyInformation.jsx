@@ -1,3 +1,4 @@
+import { AnimatedHeading } from "../components/Motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/SafetyInformation.css";
@@ -313,7 +314,9 @@ function SafetyInformation() {
 
       <main className="safety-main">
         <div className="safety-intro">
-          <h1 className="safety-title">Safety Information &amp; Guidance</h1>
+          <AnimatedHeading as="h1" className="safety-title">
+            Safety Information &amp; Guidance
+          </AnimatedHeading>
           <p className="safety-subtitle">
             Practical tips to help you stay safe, prepared and informed, both
             offline and online.

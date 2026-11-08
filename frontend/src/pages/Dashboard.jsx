@@ -1,3 +1,4 @@
+import { AnimatedHeading } from "../components/Motion";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../lib/auth";
@@ -50,7 +51,7 @@ export default function Dashboard() {
     <main className="modern-dashboard">
       <div className="dashboard-page-heading">
         <span className="portal-kicker">A SPACE THAT'S YOURS</span>
-        <h1>Your safety space.</h1>
+        <AnimatedHeading as="h1">Your safety space.</AnimatedHeading>
         <p>Hello, {user.full_name}.</p>
         <p className="dashboard-subtitle">
           A little preparation. A little connection. A world of reassurance.

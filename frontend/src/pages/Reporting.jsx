@@ -1,3 +1,4 @@
+import { AnimatedHeading } from "../components/Motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Reporting.css";
@@ -390,7 +391,9 @@ function Reporting() {
       <main className="reporting-main">
         {/* Introduction */}
         <section className="reporting-intro">
-          <h1 className="reporting-heading">Harassment Reporting Assistance</h1>
+          <AnimatedHeading as="h1" className="reporting-heading">
+            Harassment Reporting Assistance
+          </AnimatedHeading>
           <p className="reporting-intro-text">
             This page helps you understand common types of harassment, general
             steps you can take, how to preserve evidence safely, and where to

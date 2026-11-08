@@ -1,3 +1,4 @@
+import { AnimatedHeading } from "../components/Motion";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/auth";
@@ -133,7 +134,9 @@ function Register() {
             </svg>
             <span className="auth-brand-name">SAKHISAHAY</span>
           </div>
-          <h1 className="auth-title">Create Your Account</h1>
+          <AnimatedHeading as="h1" className="auth-title">
+            Create Your Account
+          </AnimatedHeading>
           <p className="auth-subtitle">
             Join SAKHISAHAY to get started with your safety support.
           </p>

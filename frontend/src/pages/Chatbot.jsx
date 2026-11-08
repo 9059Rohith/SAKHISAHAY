@@ -1,3 +1,4 @@
+import { AnimatedHeading } from "../components/Motion";
 import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import "../styles/Chatbot.css";
@@ -229,7 +230,9 @@ function Chatbot() {
         {/* Introduction */}
         <section className="chatbot-intro">
           <span className="chatbot-demo-badge">{t.demoLabel}</span>
-          <h1 className="chatbot-heading">{t.introHeading}</h1>
+          <AnimatedHeading as="h1" className="chatbot-heading">
+            {t.introHeading}
+          </AnimatedHeading>
           <p className="chatbot-intro-text">{t.introText}</p>
         </section>
 

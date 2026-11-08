@@ -1,3 +1,4 @@
+import { AnimatedHeading } from "../components/Motion";
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../lib/auth";
@@ -108,7 +109,9 @@ function Login() {
             </svg>
             <span className="auth-brand-name">SAKHISAHAY</span>
           </div>
-          <h1 className="auth-title">Welcome Back</h1>
+          <AnimatedHeading as="h1" className="auth-title">
+            Welcome Back
+          </AnimatedHeading>
           <p className="auth-subtitle">
             Log in to access your safety tools and support.
           </p>

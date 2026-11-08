@@ -2,6 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Icon, Lotus } from "./Icons";
 import { useAuth } from "../lib/auth";
+import {
+  InteriorBackdrop,
+  InteriorBanner,
+  useInteriorMotion,
+} from "./InteriorMotion";
 
 const navigation = [
   ["/dashboard", "home", "Dashboard"],
@@ -32,6 +37,8 @@ export default function InteriorFrame({ children }) {
   );
   const sidebar = useRef(null);
   const menuButton = useRef(null);
+  const motionRoot = useRef(null);
+  useInteriorMotion(motionRoot, pathname);
   useEffect(() => {
     const media = window.matchMedia("(max-width: 900px)");
     const update = () => setMobile(media.matches);
@@ -79,7 +86,7 @@ export default function InteriorFrame({ children }) {
   );
   if (accountRoutes.includes(pathname))
     return (
-      <div className="interior-app auth-experience">
+      <div className="interior-app auth-experience" ref={motionRoot}>
         <aside className="auth-story">
           {brand}
           <div className="auth-story-copy">
@@ -117,14 +124,18 @@ export default function InteriorFrame({ children }) {
     );
   if (pathname.startsWith("/share/"))
     return (
-      <div className="interior-app shared-experience">
+      <div className="interior-app shared-experience" ref={motionRoot}>
+        <InteriorBackdrop pathname={pathname} />
         <header className="shared-topbar">
           {brand}
           <span className="portal-private">
             <Icon name="shield" size={16} /> Private shared journey
           </span>
         </header>
-        <div className="portal-public-content">{children}</div>
+        <div className="portal-public-content">
+          <InteriorBanner pathname={pathname} />
+          {children}
+        </div>
       </div>
     );
   const title =
@@ -136,7 +147,10 @@ export default function InteriorFrame({ children }) {
         : "Your space");
   const name = user?.full_name || "Your safety space";
   return (
-    <div className={`interior-app portal-app ${menu ? "menu-open" : ""}`}>
+    <div
+      className={`interior-app portal-app ${menu ? "menu-open" : ""}`}
+      ref={motionRoot}
+    >
       {menu && (
         <button
           className="portal-nav-backdrop"
@@ -204,6 +218,7 @@ export default function InteriorFrame({ children }) {
         className="portal-workspace"
         inert={mobile && menu ? true : undefined}
       >
+        <InteriorBackdrop pathname={pathname} />
         <header className="portal-header">
           <button
             className="portal-menu-toggle"
@@ -255,6 +270,7 @@ export default function InteriorFrame({ children }) {
           </div>
         </header>
         <div className="portal-content">
+          <InteriorBanner key={pathname} pathname={pathname} />
           {error && (
             <p className="feedback" role="alert">
               {error}

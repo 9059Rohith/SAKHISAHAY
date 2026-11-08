@@ -59,7 +59,7 @@ The homepage has six sections, each with a distinct illustrated background:
 5. **Feel prepared:** illustrated resource cards leading to guidance, incident records and SOS.
 6. **Safer tomorrows:** the closing invitation, account access and resource footer.
 
-The image inventory includes distinct account, dashboard, contacts, location, chat, incident and SOS illustrations. The redesigned account screens and dashboard use selected illustrations; working forms use clear light surfaces to keep text readable. Artwork is encoded as WebP; below-fold homepage illustrations load lazily.
+The image inventory includes distinct account, dashboard, contacts, location, chat, incident and SOS illustrations. Every inner workspace now has its own illustrated backdrop and scenic banner, including account/admin pages and the shared-location viewer. Working forms use clear light surfaces over the scenery to keep text readable. Artwork is encoded as WebP; below-fold homepage illustrations load lazily.
 
 Motion includes:
 
@@ -76,6 +76,8 @@ The homepage uses a compact **80% layout scale** on wide desktop screens, approx
 ### Modern application workspace
 
 The approved homepage is preserved. The inner application has a shared sidebar, active page navigation, a persistent SOS shortcut, real account information and responsive cards. The dashboard shows actual contact data with loading, error and empty states. Login and registration pair a scenic illustration with readable forms. Contacts, chat, records, resources, profile and administration share the same palette and typography. On phones, the menu traps keyboard focus while open, closes on Escape, and returns focus to its trigger; its hidden links are inert.
+
+Inner pages also feature route-specific illustrated backgrounds with scroll parallax, independent banner depth and pointer movement, drifting petals, floating title words, continuous scrolling text and repeatable animated page headings. Account artwork moves too. Motion updates are scheduled with requestAnimationFrame and listeners are cleaned up on route changes; reduced-motion mode stops the movement and keeps all headings visible. Forms, emergency actions and map controls remain stationary. The SOS banner is compact and omits the text ticker to keep emergency tools easy to reach.
 
 ![Modern dashboard](docs/screenshots/dashboard.webp)
 
@@ -351,7 +353,7 @@ $env:E2E_BASE_URL='https://YOUR_DEPLOYMENT.vercel.app'
 npm --prefix frontend run test:e2e
 ```
 
-Use an isolated environment for routine E2E runs. Tests create synthetic accounts and records and require a working configured AI provider. Previous full verification recorded **37 backend tests, approximately 98.6% coverage, 9 frontend tests and 2 production browser tests passing**. Consult the delivery report for the exact scope and any checks that are not certified complete.
+Use an isolated environment for routine E2E runs. Tests create synthetic accounts and records and require a working configured AI provider. Backend verification recorded **37 tests with approximately 98.6% coverage**, alongside **9 frontend unit tests**. The browser suite now contains **4 tests** covering the homepage, mobile keyboard/long-name behavior, inner parallax/reduced motion, and the real account/contacts/incidents/OpenAI/live-share/SOS/recovery workflow. Consult the delivery report for the latest deployed results and any checks that are not certified complete.
 
 ## Deployment
 

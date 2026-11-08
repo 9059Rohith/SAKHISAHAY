@@ -38,6 +38,7 @@ import "./styles/Night.css";
 import "./styles/Story.css";
 import "./styles/Expressive.css";
 import "./styles/Interior.css";
+import "./styles/InteriorMotion.css";
 
 function AppRoutes() {
   const { pathname } = useLocation();

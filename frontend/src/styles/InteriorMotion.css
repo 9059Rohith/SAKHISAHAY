@@ -1,0 +1,398 @@
+/* Route-specific illustrated depth, scoped to keep the approved homepage intact. */
+.interior-app {
+  --interior-px: 0px;
+  --interior-py: 0px;
+  --interior-scene-y: 0px;
+  --interior-banner-y: 0px;
+}
+.portal-workspace {
+  position: relative;
+  isolation: isolate;
+}
+.interior-scenery {
+  position: fixed;
+  inset: 0 0 0 248px;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  background: #f2eaf7;
+}
+.interior-scene-image {
+  position: absolute;
+  width: calc(100% + 90px);
+  height: calc(100% + 540px);
+  max-width: none;
+  left: -45px;
+  top: -270px;
+  object-fit: cover;
+  transform: translate3d(
+    calc(var(--interior-px) * -1),
+    calc(var(--interior-scene-y) + var(--interior-py) * -1),
+    0
+  );
+  will-change: transform;
+}
+.interior-scene-wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    #faf7fcf2 5%,
+    #f9f5fcd4 48%,
+    #efe3f6b0 100%
+  );
+}
+.portal-content {
+  position: relative;
+}
+.interior-app
+  :is(
+    .page-lead,
+    .ec-subtitle,
+    .chatbot-intro-text,
+    .reporting-intro-text,
+    .safety-subtitle
+  ) {
+  color: #514359 !important;
+}
+.interior-app .portal-content .portal-kicker {
+  color: #5d4869;
+}
+.portal-footer {
+  background: #faf7fbe6;
+  backdrop-filter: blur(12px);
+}
+.interior-app
+  :is(
+    .glass-panel,
+    .ec-card,
+    .chatbot-card,
+    .sos-card,
+    .dashboard-tool,
+    .dashboard-contact-panel,
+    .dashboard-emergency,
+    .dashboard-record-link
+  ) {
+  background: #fffffff2 !important;
+}
+.interior-banner {
+  position: relative;
+  isolation: isolate;
+  min-height: 208px;
+  overflow: hidden;
+  border: 1px solid #ddc8e9;
+  border-radius: 20px;
+  margin: 0 0 30px;
+  background: #2f244d;
+  box-shadow: 0 12px 32px #42245516;
+}
+.interior-banner-image {
+  position: absolute;
+  z-index: -2;
+  inset: -110px -35px auto;
+  width: calc(100% + 70px);
+  max-width: none;
+  height: calc(100% + 220px);
+  object-fit: cover;
+  object-position: center 56%;
+  transform: translate3d(
+    calc(var(--interior-px) * -0.65),
+    calc(var(--interior-banner-y) + var(--interior-py) * -0.65),
+    0
+  );
+  will-change: transform;
+}
+.interior-banner-shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    #211c41e8 0%,
+    #34234ba3 50%,
+    #35204c20 100%
+  );
+}
+.interior-banner-copy {
+  max-width: 760px;
+  padding: 34px 34px 55px;
+}
+.interior-banner-eyebrow {
+  display: block;
+  color: #f8d9ef;
+  font:
+    600 9px/1.7 Inter,
+    sans-serif;
+  letter-spacing: 0.18em;
+  margin-bottom: 14px;
+}
+.interior-app .interior-banner-title {
+  color: #fff7fd !important;
+  font:
+    500 clamp(29px, 2.7vw, 43px)/1.12 "Cormorant Garamond",
+    Georgia,
+    serif;
+  letter-spacing: -0.025em;
+  margin: 0;
+  text-wrap: balance;
+}
+.interior-motion-word {
+  display: inline-block;
+  white-space: pre;
+  animation:
+    interior-word-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) both,
+    interior-word-float 4.2s ease-in-out infinite;
+  animation-delay: calc(var(--word) * 0.065s), calc(1s + var(--word) * 0.13s);
+}
+.interior-motion-word:nth-child(n + 4) {
+  color: #ffc9e7;
+}
+.interior-word-space {
+  display: inline;
+}
+.interior-ticker {
+  position: absolute;
+  inset: auto 0 0;
+  height: 31px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: #5f3d6f91;
+  border-top: 1px solid #fbd4ed2e;
+  backdrop-filter: blur(8px);
+}
+.interior-ticker > div {
+  display: flex;
+  width: max-content;
+  animation: interior-ticker 22s linear infinite;
+}
+.interior-ticker span {
+  flex-shrink: 0;
+  color: #fae8f7;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  padding-right: 24px;
+}
+.interior-ticker i {
+  font-style: normal;
+  color: #f4abc9;
+  margin: 0 15px;
+}
+.interior-petals {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+}
+.interior-petals i {
+  position: absolute;
+  left: calc(7% + var(--petal) * 14%);
+  top: -35px;
+  width: 9px;
+  height: 17px;
+  border-radius: 80% 10% 80% 10%;
+  background: linear-gradient(135deg, #e4add5, #b58fc9);
+  animation: interior-petal calc(14s + var(--petal) * 1.4s) linear infinite;
+  animation-delay: calc(var(--petal) * -2.3s);
+}
+.interior-banner-compact {
+  min-height: 135px;
+}
+.interior-banner-compact .interior-banner-copy {
+  padding-block: 24px 30px;
+}
+.interior-banner-compact .interior-banner-title {
+  font-size: 31px;
+}
+.interior-banner-compact .interior-ticker {
+  display: none;
+}
+.interior-app .animated-heading .reveal-word {
+  opacity: 0;
+  transform: translateY(115%) rotate(4deg) !important;
+  filter: blur(6px) !important;
+  transition:
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.6s,
+    filter 0.7s;
+  transition-delay: calc(var(--word) * 0.065s);
+}
+.interior-app .animated-heading.is-visible .reveal-word {
+  opacity: 1;
+  transform: translateY(0) rotate(0) !important;
+  filter: blur(0) !important;
+}
+.interior-app .animated-heading .word-mask:nth-last-child(-n + 2) .reveal-word {
+  color: #79558e !important;
+}
+.interior-app .animated-heading .word-mask {
+  overflow: hidden;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.auth-story {
+  background: #272044;
+  overflow: hidden;
+}
+.auth-story::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset: -160px -45px;
+  background: url("/images/account.webp") center/cover;
+  transform: translate3d(
+    calc(var(--interior-px) * -1),
+    calc(var(--interior-py) * -1 + var(--interior-scene-y) * 0.45),
+    0
+  );
+  will-change: transform;
+}
+.auth-story::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(#201d4170, #31244770);
+}
+.auth-story-copy h2 {
+  animation: interior-word-in 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.auth-story-copy h2 em {
+  display: inline-block;
+  animation: interior-word-float 5s 1s ease-in-out infinite;
+}
+.auth-story-points span {
+  animation: interior-word-in 1s 0.25s both;
+}
+.auth-story-points span + span {
+  animation-delay: 0.4s;
+}
+.shared-experience {
+  position: relative;
+  isolation: isolate;
+}
+.shared-experience .interior-scenery {
+  left: 0;
+}
+.shared-topbar {
+  position: relative;
+  z-index: 2;
+}
+.portal-public-content {
+  position: relative;
+}
+@keyframes interior-word-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px) rotate(2deg);
+    filter: blur(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+@keyframes interior-word-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+@keyframes interior-ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes interior-petal {
+  0% {
+    transform: translate3d(-30px, -30px, 0) rotate(0);
+    opacity: 0;
+  }
+  10%,
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate3d(100px, 110vh, 0) rotate(260deg);
+    opacity: 0;
+  }
+}
+@media (max-width: 1200px) {
+  .interior-scenery {
+    left: 222px;
+  }
+  .interior-banner-title {
+    max-width: 570px;
+  }
+}
+@media (max-width: 900px) {
+  .interior-scenery {
+    left: 0;
+  }
+  .interior-banner {
+    min-height: 190px;
+  }
+}
+@media (max-width: 640px) {
+  .interior-banner {
+    min-height: 192px;
+    border-radius: 16px;
+    margin-bottom: 26px;
+  }
+  .interior-banner-copy {
+    padding: 27px 23px 55px;
+  }
+  .interior-banner-eyebrow {
+    font-size: 8px;
+    letter-spacing: 0.13em;
+    max-width: 250px;
+  }
+  .interior-app .interior-banner-title {
+    font-size: 31px;
+    max-width: 300px;
+  }
+  .interior-banner-shade {
+    background: linear-gradient(90deg, #211c41e6, #34234b8c 80%);
+  }
+  .interior-scene-wash {
+    background: linear-gradient(100deg, #faf7fce6, #f7f0fbd4 55%, #eee1f6b8);
+  }
+  .interior-banner-compact {
+    min-height: 125px;
+  }
+  .interior-banner-compact .interior-banner-title {
+    font-size: 27px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .interior-app .interior-scene-image,
+  .interior-app .interior-banner-image,
+  .interior-app .auth-story::before {
+    transform: none !important;
+    will-change: auto;
+  }
+  .interior-app .interior-motion-word,
+  .interior-app .interior-ticker > div,
+  .interior-app .auth-story-copy h2,
+  .interior-app .auth-story-copy h2 em,
+  .interior-app .auth-story-points span {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  .interior-petals {
+    display: none;
+  }
+  .interior-app .animated-heading .reveal-word {
+    opacity: 1;
+    transform: none !important;
+    filter: none !important;
+    transition: none;
+  }
+}

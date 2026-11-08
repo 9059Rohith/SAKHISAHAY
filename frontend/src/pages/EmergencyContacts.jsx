@@ -1,3 +1,4 @@
+import { AnimatedHeading } from "../components/Motion";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/EmergencyContacts.css";
@@ -327,7 +328,9 @@ function EmergencyContacts() {
 
       <main className="ec-main">
         <section className="ec-hero">
-          <h1 className="ec-title">Emergency Contacts</h1>
+          <AnimatedHeading as="h1" className="ec-title">
+            Emergency Contacts
+          </AnimatedHeading>
           <p className="ec-subtitle">
             Add the trusted people who should be alerted when you need help.
             Keep their details up to date so support is always one step away.

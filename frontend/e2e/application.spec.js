@@ -56,6 +56,28 @@ test("mobile drawer keyboard focus and long contact names stay usable", async ({
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
+test("inner artwork parallax, animated headings and reduced motion", async ({ page }) => {
+  const errors = []; page.on("pageerror", e => errors.push(e.message));
+  await page.goto("/safety-information");
+  await expect(page.locator(".interior-banner-image")).toHaveAttribute("src", "/images/prepared.webp");
+  await expect.poll(() => page.locator(".interior-banner-image").evaluate(e => e.complete && e.naturalWidth > 0)).toBe(true);
+  await expect(page.locator("h1.animated-heading")).toHaveClass(/is-visible/);
+  const before = await page.locator(".interior-scene-image").evaluate(e => new DOMMatrix(getComputedStyle(e).transform).m42);
+  await page.evaluate(() => window.scrollTo(0, 360));
+  await expect.poll(async () => (await page.locator(".interior-scene-image").evaluate(e => new DOMMatrix(getComputedStyle(e).transform).m42)) - before).toBeGreaterThan(70);
+  expect(await page.locator(".interior-ticker > div").evaluate(e => getComputedStyle(e).animationName)).toBe("interior-ticker");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect.poll(() => page.locator(".interior-scene-image").evaluate(e => getComputedStyle(e).transform)).toBe("none");
+  expect(await page.locator(".interior-motion-word").first().evaluate(e => getComputedStyle(e).animationName)).toBe("none");
+  await page.goto("/login");
+  await expect(page.getByRole("heading", { name: "Welcome Back" })).toBeVisible();
+  expect(await page.locator(".auth-story").evaluate(e => getComputedStyle(e, "::before").backgroundImage)).toContain("account.webp");
+  expect(await page.locator(".auth-story-copy h2 em").evaluate(e => getComputedStyle(e).animationName)).toBe("none");
+  await page.goto("/");
+  await expect(page.locator(".interior-scenery")).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
 test("real account, persisted contacts, incidents, AI, live share, SOS, logout and recovery", async ({ page, context }) => {
   const email = `sakhi-e2e-${Date.now()}@example.com`;
   const password = "SecurePass912!";
