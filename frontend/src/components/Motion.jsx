@@ -12,7 +12,8 @@ export function AnimatedHeading({ children, as: Tag = "h2", className = "" }) {
       (entries) => {
         if (entries[0].isIntersecting) {
           ref.current.classList.add("is-visible");
-          observer.disconnect();
+        } else {
+          ref.current.classList.remove("is-visible");
         }
       },
       { threshold: 0.1 },
@@ -43,7 +44,9 @@ export function useScrollMotion(root) {
   useEffect(() => {
     const element = root.current;
     if (!element) return;
-    const reveal = [...element.querySelectorAll("[data-reveal]")];
+    const reveal = [
+      ...element.querySelectorAll("[data-reveal]:not(.animated-heading)"),
+    ];
     const sections = [...element.querySelectorAll("[data-parallax]")];
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
@@ -60,11 +63,19 @@ export function useScrollMotion(root) {
           if (r.bottom > -100 && r.top < vh + 100) {
             section.style.setProperty(
               "--scene-y",
-              `${Math.max(-100, Math.min(100, (vh / 2 - r.top - r.height / 2) * 0.15))}px`,
+              `${Math.max(-240, Math.min(240, (vh / 2 - r.top - r.height / 2) * 0.55))}px`,
+            );
+            section.style.setProperty(
+              "--copy-y",
+              `${Math.max(-52, Math.min(52, (r.top + r.height / 2 - vh / 2) * 0.13))}px`,
+            );
+            section.style.setProperty(
+              "--scene-scale",
+              `${1.04 + Math.min(0.09, Math.abs(r.top) / (vh * 12))}`,
             );
             section.style.setProperty(
               "--reading-progress",
-              `${Math.max(0, Math.min(1, (vh - r.top) / (vh * 0.8)))}`,
+              `${Math.max(0, Math.min(1, (vh * 0.8 - r.top) / (vh * 0.9 + r.height * 0.3)))}`,
             );
           }
         });
@@ -80,7 +91,8 @@ export function useScrollMotion(root) {
               entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                   entry.target.classList.add("is-visible");
-                  observer.unobserve(entry.target);
+                } else {
+                  entry.target.classList.remove("is-visible");
                 }
               }),
             { threshold: 0.12 },
@@ -128,7 +140,7 @@ export function RouteAtmosphere() {
       if (element && !reduced)
         element.style.setProperty(
           "--route-y",
-          `${Math.min(70, window.scrollY * 0.08)}px`,
+          `${Math.min(200, window.scrollY * 0.25)}px`,
         );
       frame = 0;
     };

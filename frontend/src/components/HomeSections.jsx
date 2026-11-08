@@ -2,6 +2,29 @@ import { Link } from "react-router-dom";
 import { Icon, Lotus } from "./Icons";
 import { AnimatedHeading } from "./Motion";
 
+function ScrollText({ children }) {
+  const words = String(children).trim().split(/\s+/);
+  return (
+    <p
+      className="story-lead scroll-reading"
+      data-reveal
+      style={{ "--tokens": words.length }}
+      aria-label={String(children).trim()}
+    >
+      {words.map((word, i) => (
+        <span
+          className="reading-word"
+          key={i}
+          style={{ "--token": i }}
+          aria-hidden="true"
+        >
+          {word}{" "}
+        </span>
+      ))}
+    </p>
+  );
+}
+
 function Scene({ id, image, className = "", children }) {
   return (
     <section
@@ -56,10 +79,10 @@ export default function HomeSections({ signedIn }) {
           <div id="your-circle-title">
             <AnimatedHeading>Your people. Closer than ever.</AnimatedHeading>
           </div>
-          <p className="story-lead" data-reveal>
+          <ScrollText>
             Some reassurance comes from knowing exactly who to call. Keep the
             people who care about you a little closer.
-          </p>
+          </ScrollText>
           <ul className="story-points" data-reveal>
             <li>
               <Icon name="users" />
@@ -96,10 +119,10 @@ export default function HomeSections({ signedIn }) {
           <div id="your-journey-title">
             <AnimatedHeading>Go your way. Stay connected.</AnimatedHeading>
           </div>
-          <p className="story-lead" data-reveal>
+          <ScrollText>
             A late train. A new route. The long way home. Share your journey
             with someone you trust, on your terms.
-          </p>
+          </ScrollText>
           <div className="journey-steps" data-reveal>
             <div>
               <span>1</span>
@@ -140,10 +163,10 @@ export default function HomeSections({ signedIn }) {
           <div id="a-little-guidance-title">
             <AnimatedHeading>When you need words, we’re here.</AnimatedHeading>
           </div>
-          <p className="story-lead" data-reveal>
+          <ScrollText>
             Ask the question on your mind. Find calm, practical safety guidance
             in English or Kannada, at your own pace.
-          </p>
+          </ScrollText>
           <div className="question-links" data-reveal>
             <Link to="/chatbot?question=How%20can%20I%20stay%20safe%20while%20travelling%20alone%3F">
               <Icon name="sparkles" size={20} /> “I’m travelling alone. Any
@@ -172,10 +195,10 @@ export default function HomeSections({ signedIn }) {
           <div id="feel-prepared-title">
             <AnimatedHeading>Small steps. A stronger you.</AnimatedHeading>
           </div>
-          <p className="story-lead" data-reveal>
+          <ScrollText>
             Practical information for everyday life. A private place to write
             things down. Support you can find when you need it.
-          </p>
+          </ScrollText>
         </div>
         <div className="resource-cards">
           <Link to="/safety-information" className="resource-card" data-reveal>

@@ -182,12 +182,12 @@ export default function Home() {
       if (!frame) frame = requestAnimationFrame(update);
     };
     const pointer = (e) => {
-      x = (e.clientX / innerWidth - 0.5) * 9;
-      y = (e.clientY / innerHeight - 0.5) * 7;
+      x = (e.clientX / innerWidth - 0.5) * 46;
+      y = (e.clientY / innerHeight - 0.5) * 32;
       schedule();
     };
     const onScroll = () => {
-      scroll = Math.min(window.scrollY, innerHeight) * 0.12;
+      scroll = Math.min(window.scrollY, innerHeight) * 0.38;
       schedule();
     };
     const reset = () => {

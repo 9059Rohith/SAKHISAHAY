@@ -36,6 +36,7 @@ import "@fontsource/cormorant-garamond/latin-500-italic.css";
 import "@fontsource/cormorant-garamond/latin-600.css";
 import "./styles/Night.css";
 import "./styles/Story.css";
+import "./styles/Expressive.css";
 
 function AppRoutes() {
   const { pathname } = useLocation();
