@@ -85,4 +85,19 @@ describe("secure API client", () => {
       status: 0,
     });
   });
+
+  it("rejects a successful HTML fallback instead of reporting signup success", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response("<!doctype html><html>Unavailable</html>", {
+          status: 200,
+        }),
+      ),
+    );
+    const { api } = await import("./api");
+    await expect(api.post("/auth/signup", {})).rejects.toMatchObject({
+      code: "INVALID_RESPONSE",
+    });
+  });
 });

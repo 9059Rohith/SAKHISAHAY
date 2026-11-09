@@ -120,6 +120,18 @@ test("real account, persisted contacts, incidents, AI, live share, SOS, logout a
   await page.getByLabel("Record status").selectOption("closed");
   await page.getByRole("button", { name: "Save changes", exact: true }).click();
   await expect(page.locator(".record-item small").first()).toContainText("closed");
+  await page.getByLabel("Search records").fill("Test travel");
+  await page.getByLabel("Filter status").selectOption("closed");
+  await expect(page.getByRole("heading", { name: "Test travel incident", exact: true })).toBeVisible();
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Download record", exact: true }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/\.json$/);
+  const stream = await download.createReadStream(); const chunks = []; for await (const chunk of stream) chunks.push(chunk);
+  expect(JSON.parse(Buffer.concat(chunks).toString()).title).toBe("Test travel incident");
+  await page.getByRole("button", { name: "Delete", exact: true }).click();
+  await page.getByRole("button", { name: "Confirm delete", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Test travel incident", exact: true })).toHaveCount(0);
 
   await page.goto("/chatbot");
   await page.getByLabel("Type your message").fill("Give me two concise tips for staying safe on a daytime train journey.");
@@ -164,4 +176,45 @@ test("real account, persisted contacts, incidents, AI, live share, SOS, logout a
   await expect(page.getByRole("button", { name: "Open application menu" })).toHaveAttribute("aria-expanded", "false");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(errors).toEqual([]);
+});
+
+test("mobile registration validates fields and handles an existing account", async ({page}) => {
+  await page.setViewportSize({width:390,height:844});
+  const email=`mobile-registration-${Date.now()}@example.com`, password="ಸುರಕ್ಷತೆ2026!";
+  let submissions=0;page.on("request",r=>{if(r.url().endsWith("/auth/signup"))submissions++});
+  await page.goto("/register");
+  await page.locator("#register-fullName").fill("A");await page.locator("#register-email").fill(email);
+  await page.locator("#register-password").fill("Password123");await page.locator("#register-confirmPassword").fill("Password123");
+  await page.getByRole("button",{name:"Register",exact:true}).click();
+  await expect(page.getByText("Use between 2 and 100 characters for your name.")).toBeVisible();
+  expect(submissions).toBe(0);
+  await page.locator("#register-fullName").fill("Mobile Registration");
+  await page.locator("#register-password").fill(password);await page.locator("#register-confirmPassword").fill(password);
+  await page.getByRole("button",{name:"Register",exact:true}).click();await expect(page).toHaveURL(/recovery-code/);
+  await expect(page.locator(".recovery-code")).toBeVisible();
+  await page.getByRole("checkbox").check();await page.getByRole("button",{name:"Continue to Dashboard"}).click();
+  await page.goto("/profile");await page.getByRole("button",{name:"Sign out",exact:true}).click();
+  await page.goto("/register");
+  for(const [id,value] of [["fullName","Mobile Registration"],["email",email],["password",password],["confirmPassword",password]])await page.locator(`#register-${id}`).fill(value);
+  await page.getByRole("button",{name:"Register",exact:true}).click();
+  await expect(page.getByRole("alert")).toContainText("already has an account");
+  await page.getByRole("link",{name:"Sign in to this account"}).click();
+  await expect(page.locator("#login-email")).toHaveValue(email);
+  await page.locator("#login-password").fill(password);await page.locator('button[type="submit"]').click();
+  await expect(page).toHaveURL(/dashboard/);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
+
+test("profile changes and password changes persist through a fresh sign-in", async ({page,context,baseURL}) => {
+  const email=`profile-check-${Date.now()}@example.com`;
+  const signup=await context.request.post(baseURL+"/api/v1/auth/signup",{data:{full_name:"Profile Test",email,password:"InitialProfile912!"}});
+  expect(signup.status()).toBe(201);
+  await page.goto("/profile");await page.getByLabel("Full name",{exact:true}).fill("Updated Profile Test");
+  await page.getByRole("button",{name:"Save profile",exact:true}).click();await expect(page.getByRole("status")).toContainText("Profile saved");
+  await page.reload();await expect(page.getByLabel("Full name",{exact:true})).toHaveValue("Updated Profile Test");
+  await page.getByLabel("Current password",{exact:true}).fill("InitialProfile912!");await page.getByLabel(/^New password/).fill("UpdatedProfile945!");
+  await page.getByRole("button",{name:"Change password",exact:true}).click();await expect(page).toHaveURL(/login/);
+  await page.locator("#login-email").fill(email);await page.locator("#login-password").fill("UpdatedProfile945!");await page.locator('button[type="submit"]').click();
+  await expect(page).toHaveURL(/\/(profile|dashboard)$/);
+  await page.goto("/dashboard");await expect(page.getByText("Hello, Updated Profile Test.")).toBeVisible();
 });

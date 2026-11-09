@@ -45,7 +45,19 @@ async function request(path, options = {}, retry = true) {
         "Unable to connect. Check your internet connection and try again.",
     });
   }
-  const data = await response.json().catch(() => ({}));
+  const data = await response.json().catch(() => null);
+  if (
+    response.ok &&
+    (!data ||
+      typeof data !== "object" ||
+      (["/auth/signup", "/auth/login"].includes(path) && !data.user?.id))
+  ) {
+    throw new ApiError(502, {
+      code: "INVALID_RESPONSE",
+      message:
+        "The account service returned an incomplete response. Please try again, or sign in if you already created an account.",
+    });
+  }
   if (
     response.status === 401 &&
     retry &&
@@ -87,7 +99,7 @@ async function request(path, options = {}, retry = true) {
       throw error;
     }
   }
-  if (!response.ok) throw new ApiError(response.status, data.error);
+  if (!response.ok) throw new ApiError(response.status, data?.error);
   return data;
 }
 

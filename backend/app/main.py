@@ -29,6 +29,9 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 def error_response(request, status, code, message, details=None):
     return JSONResponse(
         status_code=status,
+        headers=(
+            {"Retry-After": "900" if code == "ACCOUNT_LOCKED" else "60"} if status == 429 else None
+        ),
         content={
             "error": {
                 "code": code,
@@ -99,7 +102,14 @@ def create_app(settings=None, database=None):
     @app.exception_handler(DuplicateKeyError)
     async def conflict(request, exc):
         return error_response(
-            request, 409, "DUPLICATE", "This email, phone number or request already exists"
+            request,
+            409,
+            "DUPLICATE",
+            (
+                "An account already exists for this email address. Sign in instead."
+                if request.url.path.endswith("/auth/signup")
+                else "This email, phone number or request already exists"
+            ),
         )
 
     @app.exception_handler(PyMongoError)
@@ -165,18 +175,23 @@ def create_app(settings=None, database=None):
                 await repo.ensure_indexes()
                 if settings.rate_limit_enabled and request.method != "OPTIONS":
                     ip = request.client.host if request.client else "unknown"
-                    auth_path = any(
-                        request.url.path.endswith(x)
-                        for x in (
-                            "/auth/login",
-                            "/auth/signup",
-                            "/auth/forgot-password",
-                            "/auth/reset-password",
-                            "/auth/resend-verification",
-                        )
+                    auth_action = next(
+                        (
+                            x.rsplit("/", 1)[-1]
+                            for x in (
+                                "/auth/login",
+                                "/auth/signup",
+                                "/auth/forgot-password",
+                                "/auth/reset-password",
+                                "/auth/resend-verification",
+                            )
+                            if request.url.path.endswith(x)
+                        ),
+                        None,
                     )
                     await repo.rate_limit(
-                        ("auth:" if auth_path else "api:") + ip, 5 if auth_path else 120
+                        f"auth:{auth_action}:{ip}" if auth_action else "api:" + ip,
+                        5 if auth_action else 120,
                     )
             response = await call_next(request)
         except AppError as exc:

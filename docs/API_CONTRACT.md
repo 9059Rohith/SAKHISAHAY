@@ -2,6 +2,8 @@
 
 Base `/api/v1`. Cookie-authenticated endpoints require a session; mutations additionally require `X-CSRF-Token` matching the readable CSRF cookie and an allowed Origin. Unknown JSON fields are rejected. Lists return `{items,total,page,page_size,pages}`; page starts at 1 and page_size is 1–100. Dates are UTC ISO 8601. Public user objects exclude password hashes and tokens. Errors use `{error:{code,message,details,request_id}}`.
 
+Authentication retry limits are independent per action and client IP (five attempts per minute for signup, login, recovery/reset and resend). HTTP 429 responses include `Retry-After`; account lockout guidance remains 15 minutes. Signup duplicate-email responses direct the user to sign in, without overwriting the existing account.
+
 | Method/path | Authentication | Input | Success | Consumer |
 | --- | --- | --- | --- | --- |
 | POST /auth/signup | Public | full_name,email,password | 201 user + one-time recovery_code + verification_email_sent; session cookies | Register |

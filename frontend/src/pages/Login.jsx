@@ -24,7 +24,11 @@ function validate({ email, password }) {
 }
 
 function Login() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const location = useLocation();
+  const [formData, setFormData] = useState(() => ({
+    email: new URLSearchParams(location.search).get("email") || "",
+    password: "",
+  }));
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showNotice, setShowNotice] = useState(false);
@@ -32,7 +36,6 @@ function Login() {
   const [busy, setBusy] = useState(false);
   const auth = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleChange = (event) => {
     const { name, value } = event.target;

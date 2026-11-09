@@ -7,6 +7,13 @@ import "../styles/Auth.css";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MIN_PASSWORD_LENGTH = 8;
+const COMMON_PASSWORDS = new Set([
+  "password",
+  "password123",
+  "password123!",
+  "qwerty123",
+  "12345678",
+]);
 
 const INITIAL_FORM = {
   fullName: "",
@@ -17,9 +24,16 @@ const INITIAL_FORM = {
 
 function validate({ fullName, email, password, confirmPassword }) {
   const errors = {};
+  const passwordText = password.trim();
+  const passwordLength = Array.from(passwordText).length;
 
   if (!fullName.trim()) {
     errors.fullName = "Please enter your full name.";
+  } else if (
+    Array.from(fullName.trim()).length < 2 ||
+    Array.from(fullName.trim()).length > 100
+  ) {
+    errors.fullName = "Use between 2 and 100 characters for your name.";
   }
 
   if (!email.trim()) {
@@ -31,11 +45,15 @@ function validate({ fullName, email, password, confirmPassword }) {
   if (!password) {
     errors.password = "Please create a password.";
   } else if (
-    password.length < MIN_PASSWORD_LENGTH ||
-    !/[a-zA-Z]/.test(password) ||
-    !/\d/.test(password)
+    passwordLength < MIN_PASSWORD_LENGTH ||
+    passwordLength > 128 ||
+    !/\p{L}/u.test(passwordText) ||
+    !/\p{Nd}/u.test(passwordText)
   ) {
-    errors.password = `Use at least ${MIN_PASSWORD_LENGTH} characters including a letter and a number.`;
+    errors.password = `Use ${MIN_PASSWORD_LENGTH}–128 characters including a letter and a number.`;
+  } else if (COMMON_PASSWORDS.has(passwordText.toLowerCase())) {
+    errors.password =
+      "Choose a less common password. Use 8–128 characters including a letter and a number.";
   }
 
   if (!confirmPassword) {
@@ -54,6 +72,7 @@ function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showNotice, setShowNotice] = useState(false);
   const [serverError, setServerError] = useState("");
+  const [existingAccount, setExistingAccount] = useState(false);
   const [busy, setBusy] = useState(false);
   const auth = useAuth();
   const navigate = useNavigate();
@@ -62,6 +81,7 @@ function Register() {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setShowNotice(false);
+    setExistingAccount(false);
 
     // Clear the error for a field as soon as the user edits it
     if (errors[name]) {
@@ -90,15 +110,22 @@ function Register() {
     if (busy) return;
     setBusy(true);
     setServerError("");
+    setExistingAccount(false);
     try {
       await auth.register({
         full_name: formData.fullName.trim(),
         email: formData.email.trim(),
-        password: formData.password,
+        password: formData.password.trim(),
       });
       navigate("/recovery-code");
     } catch (error) {
-      setServerError(errorText(error));
+      const duplicate = error.status === 409 || error.code === "DUPLICATE";
+      setExistingAccount(duplicate);
+      setServerError(
+        duplicate
+          ? "This email already has an account. Sign in with your existing password, or use password recovery."
+          : errorText(error),
+      );
       setShowNotice(true);
     } finally {
       setBusy(false);
@@ -145,6 +172,15 @@ function Register() {
         {showNotice && (
           <div className="auth-notice" role="alert">
             {serverError}
+            {existingAccount && (
+              <p>
+                <Link
+                  to={`/login?email=${encodeURIComponent(formData.email.trim())}`}
+                >
+                  Sign in to this account
+                </Link>
+              </p>
+            )}
           </div>
         )}
 
@@ -229,7 +265,8 @@ function Register() {
               </button>
             </div>
             <p id="register-password-hint" className="auth-hint">
-              Use at least {MIN_PASSWORD_LENGTH} characters.
+              Use 8–128 characters with a letter and a number. Avoid common
+              passwords.
             </p>
             {errors.password && (
               <p
@@ -292,7 +329,7 @@ function Register() {
             aria-busy={busy}
             className="auth-submit"
           >
-            Register
+            {busy ? "Creating your account…" : "Register"}
           </button>
         </form>
 

@@ -1308,7 +1308,7 @@
   --auth-lavender: #c8add5;
   --auth-blush: #f7f0fa;
   --auth-rose: #bd8cad;
-  --auth-error: #c27996;
+  --auth-error: #9a3559;
   --auth-error-bg: #fff1f5;
   background: transparent !important;
   color: #8e779d !important;
@@ -1374,9 +1374,9 @@
 }
 .interior-app .auth-notice {
   background: #fff1f5 !important;
-  color: #b77594 !important;
+  color: #9a3559 !important;
   border-color: #f3dbe5 !important;
-  font-size: 11px;
+  font-size: 13px;
 }
 .interior-app .auth-page .auth-hint {
   color: #b19bbd !important;

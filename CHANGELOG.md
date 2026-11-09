@@ -1,5 +1,9 @@
 # Changelog
 
+## Registration reliability — 2026-11-10
+
+Separated authentication retry budgets by action so failed login attempts do not block a fresh registration; retained per-action limits and added Retry-After. Aligned signup name/password validation with server bounds and normalization, supported local-language letters, clarified existing-account errors with prefilled sign-in navigation, and rejected malformed successful authentication responses. Increased error-text contrast. Expanded browser coverage to mobile registration, duplicate-account login, report download/deletion and profile/password changes.
+
 ## Transactional email — 2026-11-09
 
 Added automatic signup verification when SMTP is configured, actual send-status reporting, branded HTML/plaintext mail, explicit TLS transport configuration, safe delivery diagnostics and an admin-only configuration endpoint. Fixed verification-profile refresh, missing-link feedback, password confirmation and emailed-token presentation. Password resets now clear cookies and invalidate other pending reset links. Added actual SMTP-socket and frontend regression tests, plus an isolated Atlas/browser email-link flow. Public delivery still requires SMTP provider credentials.
