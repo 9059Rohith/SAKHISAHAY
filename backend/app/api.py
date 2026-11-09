@@ -1,3 +1,4 @@
+import asyncio
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Query, Request, Response
@@ -7,6 +8,7 @@ from .core.exceptions import AppError
 from .core.security import verify_password
 
 router = APIRouter()
+SIGNUP_EMAIL_TIMEOUT_SECONDS = 6
 
 
 async def current_user(request: Request):
@@ -57,8 +59,17 @@ def set_session(response, tokens, settings):
 @router.post("/auth/signup", response_model=s.SessionOut, status_code=201, tags=["Accounts"])
 async def signup(data: s.Signup, request: Request, response: Response):
     user, recovery = await request.app.state.auth.signup(data)
+    sent = False
+    if request.app.state.auth.mailer.available:
+        try:
+            async with asyncio.timeout(SIGNUP_EMAIL_TIMEOUT_SECONDS):
+                await request.app.state.auth.email_token(user, "verify")
+            sent = True
+        except (AppError, TimeoutError):
+            # A mail outage must not discard a successfully created account.
+            pass
     set_session(response, await request.app.state.auth.session(user), request.app.state.settings)
-    return {"user": user, "recovery_code": recovery}
+    return {"user": user, "recovery_code": recovery, "verification_email_sent": sent}
 
 
 @router.post("/auth/login", response_model=s.SessionOut, tags=["Accounts"])
@@ -94,13 +105,17 @@ async def logout(request: Request, response: Response):
 async def forgot_password(data: s.EmailInput, request: Request):
     await request.app.state.auth.forgot(data.email)
     return {
-        "message": "If that address is registered and email delivery is configured, a recovery link will be sent. You can also use your saved recovery code."
+        "message": "If that address is registered, a recovery link has been requested. Check your inbox and spam folder. You can also use your saved recovery code."
     }
 
 
 @router.post("/auth/reset-password", response_model=s.Message, tags=["Accounts"])
-async def reset_password(data: s.Reset, request: Request):
+async def reset_password(data: s.Reset, request: Request, response: Response):
     await request.app.state.auth.reset(data)
+    for name in ("access_token", "refresh_token", "csrf_token"):
+        response.delete_cookie(
+            name, path="/", secure=request.app.state.settings.secure_cookies, samesite="lax"
+        )
     return {
         "message": "Password reset. Sign in with your new password. Your recovery code has been consumed if you used it."
     }
@@ -117,6 +132,8 @@ async def change_password(data: s.ChangePassword, request: Request, user: User):
 
 @router.post("/auth/resend-verification", response_model=s.Message, tags=["Accounts"])
 async def resend_verification(request: Request, user: User):
+    if user["is_verified"]:
+        return {"message": "Your email is already verified."}
     await request.app.state.auth.email_token(user, "verify")
     return {"message": "Verification link sent. Check your email."}
 
@@ -258,4 +275,16 @@ async def summary(request: Request, user: Annotated[dict, Depends(require_role("
     return {
         name: await request.app.state.repo.count(name)
         for name in ("users", "contacts", "reports", "alerts")
+    }
+
+
+@router.get("/admin/email-status", tags=["Administration"])
+async def email_status(request: Request, user: Annotated[dict, Depends(require_role("admin"))]):
+    settings = request.app.state.settings
+    mailer = request.app.state.auth.mailer
+    return {
+        "configured": mailer.available,
+        "transport": mailer.transport,
+        "sender_configured": bool(settings.email_from),
+        "authentication_configured": bool(settings.smtp_user and settings.smtp_password),
     }

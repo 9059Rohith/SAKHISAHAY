@@ -153,7 +153,7 @@ test("real account, persisted contacts, incidents, AI, live share, SOS, logout a
 
   await page.goto("/safety-information"); await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await page.goto("/profile"); await page.getByRole("button", { name: "Sign out", exact: true }).click();
-  await page.goto("/reset-password"); await page.getByLabel("Email address").fill(email); await page.getByLabel("Recovery code or token").fill(recovery); await page.getByLabel(/^New password/).fill("NewSecurePass945!"); await page.getByRole("button", { name: "Reset password", exact: true }).click();
+  await page.goto("/reset-password"); await page.getByLabel("Email address").fill(email); await page.getByLabel("Recovery code or token").fill(recovery); await page.getByLabel(/^New password/).fill("NewSecurePass945!"); await page.getByLabel("Confirm new password").fill("NewSecurePass945!"); await page.getByRole("button", { name: "Reset password", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("Password reset");
   await page.goto("/login"); await page.locator("#login-email").fill(email); await page.locator("#login-password").fill("NewSecurePass945!"); await page.locator('button[type="submit"]').click(); await expect(page).toHaveURL(/\/dashboard/);
   await page.goto("/emergency-contacts"); await page.getByRole("button", { name: "Delete Updated Test Contact" }).click(); await page.getByRole("button", { name: "Yes, delete" }).click(); await expect(page.getByRole("heading", { name: "No emergency contacts yet" })).toBeVisible();

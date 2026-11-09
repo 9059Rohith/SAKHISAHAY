@@ -250,7 +250,7 @@ async def test_missing_ai_and_mail_are_explicit(user):
     assert (await c.post(P + "/auth/resend-verification")).status_code == 503
     a = (await c.post(P + "/auth/forgot-password", json={"email": "test@example.com"})).json()
     b = (await c.post(P + "/auth/forgot-password", json={"email": "unknown@example.com"})).json()
-    assert a["message"] == b["message"]
+    assert a["error"]["message"] == b["error"]["message"]
 
 
 @pytest.mark.asyncio

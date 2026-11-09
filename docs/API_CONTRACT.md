@@ -4,13 +4,13 @@ Base `/api/v1`. Cookie-authenticated endpoints require a session; mutations addi
 
 | Method/path | Authentication | Input | Success | Consumer |
 | --- | --- | --- | --- | --- |
-| POST /auth/signup | Public | full_name,email,password | 201 user + one-time recovery_code; session cookies | Register |
+| POST /auth/signup | Public | full_name,email,password | 201 user + one-time recovery_code + verification_email_sent; session cookies | Register |
 | POST /auth/login | Public | email,password | user; session cookies | Login |
 | GET /auth/me | Session | — | user | Provider/dashboard/profile |
 | POST /auth/refresh | Refresh cookie + CSRF | — | rotated session cookies, user | API client |
 | POST /auth/logout | CSRF | — | message; clear/revoke cookies | Dashboard |
-| POST /auth/forgot-password | Public | email | generic message; email when SMTP configured | Recovery |
-| POST /auth/reset-password | Public | email,token,new_password | message; all sessions revoked | Recovery |
+| POST /auth/forgot-password | Public | email | generic message; 503 if mail globally unconfigured, without account disclosure | Recovery |
+| POST /auth/reset-password | Public | email,token,new_password | message; cookies cleared, all sessions and pending reset links revoked | Recovery |
 | POST /auth/change-password | Session | current_password,new_password | message; other sessions revoked | Profile |
 | POST /auth/resend-verification | Session | — | message, or 503 if SMTP unavailable | Profile |
 | POST /auth/verify-email | Public | token | message | Verification page |
@@ -39,3 +39,5 @@ Base `/api/v1`. Cookie-authenticated endpoints require a session; mutations addi
 Shared failures: 401 absent/expired credentials; 403 CSRF/role; 404 unknown or unowned id; 409 duplicate contact/email or stale report version; 422 malformed input; 429 rate limit/account lock; 503 Mongo/AI/mail unavailable. Invalid ObjectId becomes 404. All owned queries include user_id. No endpoint submits a police complaint or dispatches emergency services. SMS links open the device composer and require the user to send.
 
 The exported `docs/openapi.json` is the field-level request/response contract, including validation bounds and examples. See `docs/postman.json` for executable requests.
+
+`GET /admin/email-status` requires administrator authorization and reports `configured`, `transport`, `sender_configured` and `authentication_configured`. It returns no SMTP credentials and does not imply verified inbox delivery.

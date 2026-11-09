@@ -8,6 +8,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(Boolean(csrfToken()));
   const [recoveryCode, setRecoveryCode] = useState("");
+  const [verificationEmailSent, setVerificationEmailSent] = useState(null);
   const [error, setError] = useState("");
   const load = async () => {
     setLoading(true);
@@ -32,12 +33,15 @@ export function AuthProvider({ children }) {
     const data = await api.post(path, body);
     setUser(data.user);
     if (data.recovery_code) setRecoveryCode(data.recovery_code);
+    if (data.recovery_code)
+      setVerificationEmailSent(data.verification_email_sent === true);
     return data;
   };
   const logout = async () => {
     await api.post("/auth/logout");
     setUser(null);
     setRecoveryCode("");
+    setVerificationEmailSent(null);
   };
   return (
     <AuthContext.Provider
@@ -48,6 +52,7 @@ export function AuthProvider({ children }) {
         retry: load,
         setUser,
         recoveryCode,
+        verificationEmailSent,
         clearRecovery: () => setRecoveryCode(""),
         login: (data) => authenticate("/auth/login", data),
         register: (data) => authenticate("/auth/signup", data),

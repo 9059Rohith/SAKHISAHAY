@@ -59,6 +59,7 @@ class UserOut(BaseModel):
 class SessionOut(BaseModel):
     user: UserOut
     recovery_code: str | None = None
+    verification_email_sent: bool | None = None
 
 
 class Message(BaseModel):

@@ -1,3 +1,4 @@
+import asyncio
 import secrets
 from datetime import timedelta
 from urllib.parse import urlencode
@@ -164,7 +165,7 @@ class AuthService:
 
     async def email_token(self, user, purpose):
         token = random_token()
-        await self.repo.create(
+        record = await self.repo.create(
             "password_resets",
             {
                 "user_id": user["id"],
@@ -176,13 +177,23 @@ class AuthService:
         )
         query = urlencode({"token": token, "email": user["email"]})
         route = "/verify-email" if purpose == "verify" else "/reset-password"
-        await self.mailer.send_link(
-            user["email"],
-            "Verify your email" if purpose == "verify" else "Reset your password",
-            self.settings.frontend_url + route + "?" + query,
-        )
+        try:
+            await self.mailer.send_link(
+                user["email"],
+                "Verify your email" if purpose == "verify" else "Reset your password",
+                self.settings.frontend_url.rstrip("/") + route + "?" + query,
+            )
+        except (AppError, asyncio.CancelledError):
+            await self.repo.update("password_resets", record["id"], {"used": True})
+            raise
 
     async def forgot(self, email):
+        if not self.mailer.available:
+            raise AppError(
+                503,
+                "EMAIL_UNAVAILABLE",
+                "Email delivery is not configured yet. Use your saved recovery code, or try again later.",
+            )
         user = await self.repo.find("users", {"email": str(email).lower()})
         if user and self.mailer.available:
             try:
@@ -239,6 +250,11 @@ class AuthService:
         )
         await self.repo.update_many("refresh_tokens", {"user_id": user["id"]}, {"revoked": True})
         await self.repo.update_many("session_families", {"user_id": user["id"]}, {"revoked": True})
+        await self.repo.update_many(
+            "password_resets",
+            {"user_id": user["id"], "purpose": "reset", "used": False},
+            {"used": True},
+        )
 
     async def verify_email(self, token):
         record = await self.repo.update_where(

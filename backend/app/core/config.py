@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Literal
 
 from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -32,6 +33,7 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4.1-mini"
     smtp_host: str = ""
     smtp_port: int = 587
+    smtp_security: Literal["auto", "starttls", "tls", "none"] = "auto"
     smtp_user: str = ""
     smtp_password: str = ""
     email_from: str = ""
@@ -44,6 +46,8 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def production_guards(self):
         if self.app_env == "production":
+            if self.smtp_host and self.smtp_security == "none":
+                raise ValueError("Production SMTP requires TLS or STARTTLS")
             if self.secret_key == DEV_SECRET or len(self.secret_key) < 64:
                 raise ValueError("Production SECRET_KEY must be a random value of 64+ characters")
             if self.debug or "*" in self.origins:

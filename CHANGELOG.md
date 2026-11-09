@@ -1,5 +1,9 @@
 # Changelog
 
+## Transactional email — 2026-11-09
+
+Added automatic signup verification when SMTP is configured, actual send-status reporting, branded HTML/plaintext mail, explicit TLS transport configuration, safe delivery diagnostics and an admin-only configuration endpoint. Fixed verification-profile refresh, missing-link feedback, password confirmation and emailed-token presentation. Password resets now clear cookies and invalidate other pending reset links. Added actual SMTP-socket and frontend regression tests, plus an isolated Atlas/browser email-link flow. Public delivery still requires SMTP provider credentials.
+
 ## Inner-page motion update — 2026-11-08
 
 Added distinct illustrated backgrounds and parallax banners throughout the application, including shared-location and admin views. Added scroll/pointer depth, drifting petals, floating title words, text tickers and animated headings on account/forms/resources pages. Preserved readable forms, login, real OpenAI chat, OpenStreetMap controls and all existing data flows. Added inner-motion/reduced-motion browser coverage and updated screenshots.

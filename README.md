@@ -93,7 +93,15 @@ Map tiles are an external service. If they cannot load, the application keeps co
 
 ### Connecting SMTP
 
-Email verification and recovery use the existing server-side SMTP adapter. Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` and `EMAIL_FROM` in the hosting environment, then redeploy. Port 465 uses TLS; other ports use STARTTLS. Configure the sender domain with the mail provider and test delivery through profile verification and password recovery. Credentials belong only in server environment settings. No SMTP provider credentials were supplied, so the live deployment does not claim to send mail; saved recovery codes work independently.
+Email verification and recovery use the server-side SMTP adapter. Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` and `EMAIL_FROM` in the hosting environment, then redeploy. `SMTP_SECURITY=auto` uses TLS on port 465 and mandatory STARTTLS on other ports. Use `tls` or `starttls` for a provider-specific custom port; `none` is limited to local development and is rejected in production. TLS certificates are validated. Configure the sender/domain with the mail provider and test delivery to an inbox you control. Credentials belong only in server environment settings. No SMTP provider credentials were supplied, so public email delivery remains blocked; saved recovery codes work independently.
+
+When SMTP is configured, registration sends a branded multipart verification email automatically and reports whether it was sent. An email outage does not discard the new account; verification can be resent from My account. Confirming an email link immediately refreshes the signed-in profile, and verified accounts cannot resend unnecessary verification messages. Forgot-password requests preserve account privacy. If mail delivery is globally unconfigured, both known and unknown addresses receive the same explicit unavailable response.
+
+Verification and reset links expire after 30 minutes and can be used once. Failed sends invalidate their newly issued tokens. Password reset requires matching confirmation, hides an emailed token from visible form fields, clears local session cookies and revokes all sessions plus pending reset links. Administrator-only `GET /api/v1/admin/email-status` reports configuration flags and transport without exposing mail credentials; it does not certify inbox delivery.
+
+Tests in `backend/tests/test_email_delivery.py` send through an actual loopback SMTP socket. A separate browser check against an isolated Atlas database exercised registration → received message → verification → profile refresh → forgot password → received reset link → new-password sign-in. These are local integration proofs, not evidence of delivery through a public provider. See [the SMTP activation guide](docs/SMTP_SETUP.md).
+
+![Verification email template](docs/screenshots/verification-email.webp)
 
 ![Parallax section and animated typography](docs/screenshots/parallax-section.webp)
 
@@ -353,7 +361,7 @@ $env:E2E_BASE_URL='https://YOUR_DEPLOYMENT.vercel.app'
 npm --prefix frontend run test:e2e
 ```
 
-Use an isolated environment for routine E2E runs. Tests create synthetic accounts and records and require a working configured AI provider. Backend verification recorded **37 tests with approximately 98.6% coverage**, alongside **9 frontend unit tests**. The browser suite now contains **4 tests** covering the homepage, mobile keyboard/long-name behavior, inner parallax/reduced motion, and the real account/contacts/incidents/OpenAI/live-share/SOS/recovery workflow. Consult the delivery report for the latest deployed results and any checks that are not certified complete.
+Use an isolated environment for routine E2E runs. Tests create synthetic accounts and records and require a working configured AI provider. Current verification includes **44 backend tests**, **12 frontend unit tests** and **4 browser tests** covering the homepage, mobile keyboard/long-name behavior, inner parallax/reduced motion, and the real account/contacts/incidents/OpenAI/live-share/SOS/recovery workflow. Seven backend email tests include SMTP socket delivery and slow-provider/failure cases. Previous coverage was approximately 98.6%; coverage has not been re-certified for every new email branch. Consult the delivery report for the latest deployed results and any checks that are not certified complete.
 
 ## Deployment
 

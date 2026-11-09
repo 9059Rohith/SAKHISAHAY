@@ -5,7 +5,8 @@ import { api, errorText } from "../lib/api";
 import { useAuth } from "../lib/auth";
 
 export function RecoveryCode() {
-  const { recoveryCode, clearRecovery } = useAuth();
+  const { recoveryCode, clearRecovery, verificationEmailSent, user } =
+    useAuth();
   const [saved, setSaved] = useState(false);
   const navigate = useNavigate();
   return (
@@ -14,6 +15,18 @@ export function RecoveryCode() {
       lead="Keep this one-time recovery code somewhere safe, such as a password manager. It lets you reset your password without email delivery."
     >
       <section className="glass-panel">
+        {verificationEmailSent === true && (
+          <p className="feedback success" role="status">
+            A verification link was sent to {user.email}. Check your inbox and
+            spam folder, then open the link to confirm your address.
+          </p>
+        )}
+        {verificationEmailSent === false && (
+          <p className="small-note">
+            Your account has been created. You can request a verification email
+            from My account.
+          </p>
+        )}
         <h2>Save your recovery code</h2>
         {recoveryCode ? (
           <>
@@ -58,10 +71,13 @@ export function RecoveryCode() {
 }
 
 export function RecoveryPage({ reset = false }) {
+  const auth = useAuth();
   const [params] = useSearchParams();
   const [email, setEmail] = useState(params.get("email") || "");
   const [token, setToken] = useState(params.get("token") || "");
   const [password, setPassword] = useState("");
+  const [confirmation, setConfirmation] = useState("");
+  const emailLink = Boolean(params.get("token"));
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
@@ -70,6 +86,13 @@ export function RecoveryPage({ reset = false }) {
     setBusy(true);
     setError("");
     setMessage("");
+    if (reset && password !== confirmation) {
+      setError(
+        "The passwords do not match. Please enter the same new password twice.",
+      );
+      setBusy(false);
+      return;
+    }
     try {
       const result = await api.post(
         reset ? "/auth/reset-password" : "/auth/forgot-password",
@@ -79,6 +102,8 @@ export function RecoveryPage({ reset = false }) {
       if (reset) {
         setPassword("");
         setToken("");
+        setConfirmation("");
+        auth.setUser(null);
       }
     } catch (e) {
       setError(errorText(e));
@@ -110,16 +135,24 @@ export function RecoveryPage({ reset = false }) {
           </label>
           {reset && (
             <>
-              <label>
-                Recovery code or token
-                <input
-                  autoComplete="off"
-                  minLength={10}
-                  required
-                  value={token}
-                  onChange={(e) => setToken(e.target.value)}
-                />
-              </label>
+              {!emailLink && (
+                <label>
+                  Recovery code or token
+                  <input
+                    autoComplete="off"
+                    minLength={10}
+                    required
+                    value={token}
+                    onChange={(e) => setToken(e.target.value)}
+                  />
+                </label>
+              )}
+              {emailLink && (
+                <p className="small-note">
+                  You opened a secure recovery link. Choose your new password
+                  below.
+                </p>
+              )}
               <label>
                 New password
                 <input
@@ -135,6 +168,18 @@ export function RecoveryPage({ reset = false }) {
                   Use at least 8 characters including a letter and a number.
                 </span>
               </label>
+              <label>
+                Confirm new password
+                <input
+                  type="password"
+                  autoComplete="new-password"
+                  minLength={8}
+                  maxLength={128}
+                  required
+                  value={confirmation}
+                  onChange={(e) => setConfirmation(e.target.value)}
+                />
+              </label>
             </>
           )}
           <button className="night-button" disabled={busy}>
@@ -146,8 +191,8 @@ export function RecoveryPage({ reset = false }) {
           </button>
         </form>
         <p className="small-note" style={{ marginTop: 20 }}>
-          Email links require configured email delivery. Your saved recovery
-          code works without it.
+          Recovery links expire after 30 minutes and can be used once. Never
+          share your link, password or saved recovery code.
         </p>
         <div className="action-row" style={{ marginTop: 20 }}>
           <Link
@@ -226,7 +271,7 @@ export function AccountPage() {
           <button
             className="night-button secondary"
             style={{ marginTop: 20 }}
-            disabled={busy}
+            disabled={busy || user.is_verified}
             onClick={() =>
               run(async () => {
                 const r = await api.post("/auth/resend-verification");
@@ -308,9 +353,15 @@ export function AccountPage() {
 }
 
 export function VerifyPage() {
+  const auth = useAuth();
   const [params] = useSearchParams();
+  const token = params.get("token") || "";
   const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(
+    token.length >= 10
+      ? ""
+      : "This verification link is missing or invalid. Request a new verification email from My account.",
+  );
   const [busy, setBusy] = useState(false);
   return (
     <PageShell title="Verify your email">
@@ -321,17 +372,25 @@ export function VerifyPage() {
         </p>
         <button
           className="night-button"
-          disabled={busy || Boolean(message)}
+          disabled={busy || Boolean(message) || token.length < 10}
           onClick={async () => {
             setBusy(true);
+            setError("");
             try {
               setMessage(
                 (
                   await api.post("/auth/verify-email", {
-                    token: params.get("token") || "",
+                    token,
                   })
                 ).message,
               );
+              if (auth.user) {
+                try {
+                  auth.setUser(await api.get("/auth/me"));
+                } catch {
+                  /* Verification succeeded; sign-in can refresh the account later. */
+                }
+              }
             } catch (e) {
               setError(errorText(e));
             } finally {

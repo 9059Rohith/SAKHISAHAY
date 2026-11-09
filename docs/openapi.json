@@ -1361,6 +1361,25 @@
           }
         }
       }
+    },
+    "/api/v1/admin/email-status": {
+      "get": {
+        "tags": [
+          "Administration"
+        ],
+        "summary": "Email Status",
+        "operationId": "email_status_api_v1_admin_email_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2257,6 +2276,17 @@
               }
             ],
             "title": "Recovery Code"
+          },
+          "verification_email_sent": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verification Email Sent"
           }
         },
         "type": "object",

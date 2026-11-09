@@ -650,6 +650,19 @@
         ],
         "url": "{{base_url}}/api/v1/admin/summary"
       }
+    },
+    {
+      "name": "Email Status",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-CSRF-Token",
+            "value": "{{csrf_token}}"
+          }
+        ],
+        "url": "{{base_url}}/api/v1/admin/email-status"
+      }
     }
   ]
 }
