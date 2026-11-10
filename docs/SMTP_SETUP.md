@@ -1,6 +1,16 @@
 # SMTP activation and verification
 
-The application implements SMTP-backed signup verification, resend and password recovery. Live sending requires provider credentials and an authorized sender. None were available in the project or deployment at the time of this update. Do not treat a successful local capture test as public inbox delivery.
+The application implements SMTP-backed signup verification, resend and password recovery. Live sending requires accepted provider credentials and an authorized sender. Do not treat configured settings or a successful local capture test as public inbox delivery.
+
+## Activation status: 2026-11-10
+
+Gmail SMTP is active in the ignored `backend/.env` file and the Vercel production environment using `smtp.gmail.com`, port `465`, and `SMTP_SECURITY=tls`. The supplied `EMAIL_USER` and `EMAIL_PASSWORD` values were mapped to the adapter's `SMTP_USER` and `SMTP_PASSWORD` settings. Hosted authentication values are stored as secrets; no credentials belong in tracked files. `ADMIN_EMAIL` does not grant an application administrator role.
+
+Production deployment `dpl_BTiUSw594seDvbyfcrcBUGwkRgpJ` is READY at `https://sakhisahay-9059.vercel.app`, using application commit `f60f6235431c4cec4783b57bc703b3e51fec6b64`. No application-code changes were needed to activate the existing mail adapter.
+
+The live test registered a temporary Gmail alias, confirmed `verification_email_sent=true`, read only the test verification message from the recipient inbox, followed its production verification link and confirmed the account was verified. It then requested password recovery, received the reset email, used its link, confirmed rejection of the old password and successfully signed in with the new password. The temporary account and its authentication tokens were removed afterward. All 46 backend tests passed, including seven SMTP integration tests, with existing mongomock deprecation warnings.
+
+For future credential rotation, generate a [Gmail app password](https://support.google.com/mail/answer/185833?hl=en) for the sender account and replace `SMTP_PASSWORD` locally and in the Vercel production environment, then redeploy and repeat the provider activation check below. Credentials remain server-only.
 
 ## Hosting settings
 
